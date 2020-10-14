@@ -128,12 +128,17 @@
       <DependentUpon>MarsResource.resx</DependentUpon>
     </Compile>
     <Compile Include="Global\Base.cs" />
+    <Compile Include="Global\Extension.cs" />
     <Compile Include="Global\GlobalDefinitions.cs" />
+    <Compile Include="Pages\Certifications.cs" />
+    <Compile Include="Pages\Education.cs" />
+    <Compile Include="Pages\Language.cs" />
     <Compile Include="Pages\ManageListings.cs" />
     <Compile Include="Pages\ShareSkill.cs" />
     <Compile Include="Pages\SignIn.cs" />
     <Compile Include="Pages\SignUp.cs" />
     <Compile Include="Pages\Profile.cs" />
+    <Compile Include="Pages\Skills.cs" />
     <Compile Include="Test\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

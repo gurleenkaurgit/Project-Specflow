@@ -21,7 +21,7 @@ namespace MarsFramework.Pages
 
         //Click on Manage Listings Link
         [FindsBy(How = How.LinkText, Using = "Manage Listings")]
-        private IWebElement manageListingsLink { get; set; }
+        private IWebElement ManageListingsLink { get; set; }
 
         //Get Pagination Buttons
         [FindsBy(How = How.XPath, Using = "//div[@class='ui buttons semantic-ui-react-button-pagination']/button")]
@@ -56,10 +56,10 @@ namespace MarsFramework.Pages
         internal void NavigateToManageListing()
         {
             //Wait till Manage Listing is visible
-            GlobalDefinitions.WaitForElement(GlobalDefinitions.driver, By.LinkText("Manage Listings"), 5);
+            Extension.WaitForElementDisplayed(GlobalDefinitions.driver, By.LinkText("Manage Listings"), 5);
             
             //Click Manage Listing Link
-            manageListingsLink.Click();
+            ManageListingsLink.Click();
         }
 
         internal void CheckExistingSkillPresent()
@@ -99,8 +99,8 @@ namespace MarsFramework.Pages
             //Click the Edit icon 
             edit.Click();
 
-            //Call EnterShareSkillData method to add Edit data
-            shareSkill.EnterShareSkillData();
+            //Call EditShareSkillData method to add Edit data
+            shareSkill.EditShareSkillData();
 
             //Call ValidateShareSkillData Method to Validate entered Share Skill data
            // shareSkill.ValidateShareSkillData();
@@ -156,7 +156,8 @@ namespace MarsFramework.Pages
             {
                 ShareSkill shareSkill = new ShareSkill();
                 shareSkill.AddShareSkill();
-                MatchingRecordsBeforeDelete= SearchListings(CategoryToDelete, TitleToDelete, DescriptionToDelete);
+                MatchingRecordsBeforeDelete = 1;
+                //MatchingRecordsBeforeDelete = SearchListings(CategoryToDelete, TitleToDelete, DescriptionToDelete);
             }
 
             //Navigate to Manage Listing

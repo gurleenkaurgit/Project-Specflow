@@ -79,6 +79,15 @@ namespace MarsFramework.Config {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ExcelData\\TestDataProfile.xlsx.
+        /// </summary>
+        internal static string ExcelPathProfile {
+            get {
+                return ResourceManager.GetString("ExcelPathProfile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ExcelData\\TestDataShareSkill.xlsx.
         /// </summary>
         internal static string ExcelPathShareSkill {

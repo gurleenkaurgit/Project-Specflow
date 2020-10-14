@@ -40,6 +40,7 @@ namespace MarsFramework.Global
         public static void SelectDropDown(IWebElement dropDownElement, String selectBY, String bY )
         {
             SelectElement dropDown = new SelectElement(dropDownElement);
+            dropDown.SelectByIndex(0);
             if (selectBY.ToLower() == "SelectByText".ToLower())
             {
                 dropDown.SelectByText(bY);
@@ -134,19 +135,7 @@ namespace MarsFramework.Global
             }
         }
 
-        #region WaitforElement 
-
-        public static void wait(int time)
-        {
-            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(time);
-
-        }
-        public static IWebElement WaitForElement(IWebDriver driver, By by, int timeOutinSeconds)
-        {
-            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(timeOutinSeconds));
-            return (wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(by)));
-        }
-        #endregion
+        
 
 
         #region Excel 

@@ -30,7 +30,10 @@ namespace MarsFramework.Pages
         [FindsBy(How = How.XPath, Using = "//button[contains(text(),'Login')]")]
         private IWebElement LoginBtn { get; set; }
 
-        
+        //Finding the Sign Out Button
+        [FindsBy(How = How.XPath, Using = "//button[text()='Sign Out']")]
+        private IWebElement SignOutBtn { get; set; }
+
         #endregion
 
         internal void LoginSteps()
@@ -53,6 +56,11 @@ namespace MarsFramework.Pages
 
             //Click Login Button
             LoginBtn.Click();
+
+        }
+        internal void SignOutSteps()
+        {
+            SignOutBtn.Click();
 
         }
     }

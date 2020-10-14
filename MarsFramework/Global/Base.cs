@@ -21,6 +21,7 @@ namespace MarsFramework.Global
         public static string ScreenshotPath = path + MarsResource.ScreenShotPath;
         public static string ReportPath = path + MarsResource.ReportPath;
         public static string ExcelPathManageListing = path + MarsResource.ExcelPathManageListing;
+        public static string ExcelPathProfile = path + MarsResource.ExcelPathProfile;
         #endregion
 
         #region reports

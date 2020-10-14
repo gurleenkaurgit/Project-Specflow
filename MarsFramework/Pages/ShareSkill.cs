@@ -77,7 +77,7 @@ namespace MarsFramework.Pages
         private IWebElement EndDateDropDown { get; set; }
 
         //Storing the table of available days
-        [FindsBy(How = How.XPath, Using = "//body/div/div/div[@id='service-listing-section']/div[@class='ui container']/div[@class='listing']/form[@class='ui form']/div[7]/div[2]/div[1]")]
+        [FindsBy(How = How.XPath, Using = "//label[text()='Start date']/../../..")]
         private IWebElement Days { get; set; }
 
         //Storing the starttime
@@ -87,7 +87,7 @@ namespace MarsFramework.Pages
         //Click on StartTime dropdown
         [FindsBy(How = How.XPath, Using = "//div[3]/div[2]/input[1]")]
         private IWebElement StartTimeDropDown { get; set; }
-
+              
         //Click on EndTime dropdown
         [FindsBy(How = How.XPath, Using = "//div[3]/div[3]/input[1]")]
         private IWebElement EndTimeDropDown { get; set; }
@@ -120,11 +120,17 @@ namespace MarsFramework.Pages
         [FindsBy(How = How.XPath, Using = "//input[@value='Save']")]
         private IWebElement Save { get; set; }
 
+        //Remove Entered Tags button
+        [FindsBy(How = How.CssSelector, Using = ".ReactTags__remove")]
+        private IList<IWebElement> RemoveTags { get; set; }
+
+      
+
         internal void ClickShareSkillButton()
         {
 
             //Wait for ShareSkill Button
-            GlobalDefinitions.WaitForElement(GlobalDefinitions.driver, By.LinkText("Share Skill"), 5);
+            Extension.WaitForElementDisplayed(GlobalDefinitions.driver,By.LinkText("Share Skill"),5);
 
             //Click ShareSkill Button
             ShareSkillButton.Click();
@@ -366,6 +372,118 @@ namespace MarsFramework.Pages
             }
         }
 
+        internal void EditShareSkillData()
+        {
+            Extension.WaitForElementDisplayed(driver, By.Name("title"), 5);
+            //Clear the Title
+            Title.Clear();
+
+            //Enter the Title
+            Title.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "Title"));
+
+            //Clear the Description
+            Description.Clear();
+
+            //Enter the Description
+            Description.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "Description"));
+
+            CategoryDropDown.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "Category"));
+
+            //Deselect the Category drop down
+            //CategoryDropDown.Click();
+
+            //Extension.WaitForElementDisplayed(driver, By.Name("categoryId"), 5);
+            // Extension.WaitForElementClickable
+
+            //Select Category
+            // GlobalDefinitions.SelectDropDown(CategoryDropDown, "SelectByText", GlobalDefinitions.ExcelLib.ReadData(2, "Category"));
+
+            //Select Sub-Category
+            GlobalDefinitions.SelectDropDown(SubCategoryDropDown, "SelectByText", GlobalDefinitions.ExcelLib.ReadData(2, "SubCategory"));
+
+            //Clear the Entered tag
+            foreach(IWebElement removeTag in RemoveTags)
+            {
+                removeTag.Click();
+            }
+
+            //Enter Tags
+            Tags.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "Tags") + "\n");
+
+            //Select Service Type
+            GlobalDefinitions.SelectRadioButton(ServiceTypeOptions, GlobalDefinitions.ExcelLib.ReadData(2, "ServiceType"), By.Name("serviceType"));
+
+            //Select Location Type
+            GlobalDefinitions.SelectRadioButton(LocationTypeOption, GlobalDefinitions.ExcelLib.ReadData(2, "LocationType"), By.Name("locationType"));
+
+            //Add Start Date
+            StartDateDropDown.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "Startdate"));
+
+            //Add End Date
+            EndDateDropDown.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "Enddate"));
+
+          //Clear the Available days data
+
+            int DaysRows = Days.FindElements(By.Name("Available")).Count;
+
+            for (int i = 1; i <= DaysRows; i++)
+            {
+                if(Days.FindElements(By.Name("Available"))[i - 1].Selected)
+                {
+                    Days.FindElements(By.Name("Available"))[i - 1].Click();
+                    Days.FindElements(By.Name("StartTime"))[i - 1].SendKeys(Keys.Delete);
+                    Days.FindElements(By.Name("EndTime"))[i - 1].SendKeys(Keys.Delete);
+
+                }
+
+            }
+
+                //Getting all the values in Selectday column in a list
+                IList<string> DaysList = GlobalDefinitions.ExcelLib.ReadData(2, "Selectday").Split('/');
+
+            //Getting count for all days 
+            //Check the checkbox for selectdays mentioned in excel and enter time for same
+            
+            foreach (string AvailableDays in DaysList)
+            {
+                for (int i = 1; i <= DaysRows; i++)
+                {
+                    string DayValue = Days.FindElements(By.ClassName("fields"))[i].Text;
+                    if (AvailableDays.ToLower() == DayValue.ToLower())
+                    {
+                        Days.FindElements(By.Name("Available"))[i - 1].Click();
+                        string StartTime = DateTime.Parse(GlobalDefinitions.ExcelLib.ReadData(2, "Starttime")).ToString("hh:mmtt");
+                        Days.FindElements(By.Name("StartTime"))[i - 1].SendKeys(StartTime);
+
+                        string EndTime = DateTime.Parse(GlobalDefinitions.ExcelLib.ReadData(2, "Endtime")).ToString("hh:mmtt");
+                        Days.FindElements(By.Name("EndTime"))[i - 1].SendKeys(EndTime);
+                        break;
+                    }
+                }
+            }
+
+            //Select Skill Trade
+            GlobalDefinitions.SelectRadioButton(SkillTradeOption, GlobalDefinitions.ExcelLib.ReadData(2, "SkillTrade"), By.Name("skillTrades"));
+            string SkillTradeValue = GlobalDefinitions.ExcelLib.ReadData(2, "SkillTrade").ToUpper();
+
+            //Enter Skill-Exchange or Credit
+            if (SkillTradeValue == "SKILL-EXCHANGE")
+            {
+
+                SkillExchange.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "Skill-Exchange") + "\n");
+
+            }
+            else
+            {
+                CreditAmount.Clear();
+                CreditAmount.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "Credit"));
+            }
+
+          
+            //Select Active radio
+            GlobalDefinitions.SelectRadioButton(ActiveOption, GlobalDefinitions.ExcelLib.ReadData(2, "Active"), By.Name("isActive"));
+
+        }
 
     }
 }

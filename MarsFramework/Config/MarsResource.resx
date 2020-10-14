@@ -124,6 +124,9 @@
   <data name="ExcelPathManageListing" xml:space="preserve">
     <value>ExcelData\\TestDataManageListings.xlsx</value>
   </data>
+  <data name="ExcelPathProfile" xml:space="preserve">
+    <value>ExcelData\\TestDataProfile.xlsx</value>
+  </data>
   <data name="ExcelPathShareSkill" xml:space="preserve">
     <value>ExcelData\\TestDataShareSkill.xlsx</value>
   </data>
