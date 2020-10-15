@@ -80,7 +80,10 @@ namespace MarsFramework.Global
                     Assert.IsTrue(true);
                 }
                 else
+                {
                     Base.test.Log(LogStatus.Fail, fieldName + " Entered Failed, Image - " + SaveScreenShotClass.SaveScreenshot(GlobalDefinitions.driver, "Report"));
+                    Assert.IsTrue(false);
+                }
             }
             catch (Exception e)
             {
@@ -103,8 +106,12 @@ namespace MarsFramework.Global
                 }
 
                 else
+                {
                     Base.test.Log(LogStatus.Fail, dropDownFieldName + " Selection Failed, Image - " + SaveScreenShotClass.SaveScreenshot(GlobalDefinitions.driver, "Report"));
+                    Assert.IsTrue(false);
+                }
             }
+
             catch (Exception e)
             {
                 Base.test.Log(LogStatus.Fail, "Caught Exception For " + dropDownFieldName, e.Message);
@@ -126,7 +133,11 @@ namespace MarsFramework.Global
                             Assert.IsTrue(true);
                         }
                         else
+                        {
                             Base.test.Log(LogStatus.Fail, radiobuttonsFieldName + " Selection Failed, Image - " + SaveScreenShotClass.SaveScreenshot(GlobalDefinitions.driver, "Report"));
+                            Assert.IsTrue(false);
+                        }
+                            
                     }
             }
             catch (Exception e)

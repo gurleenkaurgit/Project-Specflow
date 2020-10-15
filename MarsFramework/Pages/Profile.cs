@@ -140,33 +140,15 @@ namespace MarsFramework
         }
         internal void ValidateAvailabilityType()
         {
-            try
-            {
-                //Get the expected Availability value
-                string expectedAvailabilityType = ExcelLib.ReadData(2, "AvailabilityType");
+            //Get the expected Availability Type value
+            string expectedAvailabilityType = ExcelLib.ReadData(2, "AvailabilityType");
 
-                //Get the Actual Availability value
-                string actualAvailabilityType = driver.FindElement(By.XPath("//strong[text()='Availability']/../..//div[@class='right floated content']")).Text;
+            //Get the Actual Availability Type value
+            string actualAvailabilityType = driver.FindElement(By.XPath("//strong[text()='Availability']/../..//div[@class='right floated content']")).Text;
 
-                if(expectedAvailabilityType== actualAvailabilityType)
-                {
-                    Base.test.Log(LogStatus.Pass, "Availability Type Selected Successful");
-                    SaveScreenShotClass.SaveScreenshot(driver, "Select Availability Type");
-                    Assert.IsTrue(true);
-                }
-                else
-                {
-                    Base.test.Log(LogStatus.Fail, "Select Availability Type-Test Failed");
-                    Assert.IsTrue(false);
-                }
-
-            }
-            catch (Exception e)
-            {
-                Base.test.Log(LogStatus.Fail, "Caught Exception For Availability Type", e.Message);
-            }
-
-
+            //Validate the selected Availability Type
+            GlobalDefinitions.ValidateFieldData(expectedAvailabilityType, actualAvailabilityType, "Availability Type");
+                     
         }
 
         //Select the Availability Hour in Profile Section
@@ -190,34 +172,18 @@ namespace MarsFramework
 
         internal void ValidateAvailabilityHours()
         {
-            try
-            {
-                //Get the expected Availability value
-                string expectedAvailabilityHours = ExcelLib.ReadData(2, "AvailabilityHours");
 
-                //Get the Actual Availability value
-                string actualAvailabilityHours = driver.FindElement(By.XPath("//strong[text()='Hours']/../..//div[@class='right floated content']")).Text;
+            //Get the expected Availability Hour value
+            string expectedAvailabilityHours = ExcelLib.ReadData(2, "AvailabilityHours");
 
-                if (expectedAvailabilityHours == actualAvailabilityHours)
-                {
-                    Base.test.Log(LogStatus.Pass, "Availability Hours Selected Successful");
-                    SaveScreenShotClass.SaveScreenshot(driver, "Select Availability Hours");
-                    Assert.IsTrue(true);
-                }
-                else
-                {
-                    Base.test.Log(LogStatus.Fail, "Select Availability Hours-Test Failed");
-                    Assert.IsTrue(false);
-                }
+            //Get the Actual Availability Hour value
+            string actualAvailabilityHours = driver.FindElement(By.XPath("//strong[text()='Hours']/../..//div[@class='right floated content']")).Text;
 
-            }
-            catch (Exception e)
-            {
-                Base.test.Log(LogStatus.Fail, "Caught Exception For Availability Hours", e.Message);
-            }
-
+            //Validate the selected Availability Type
+            GlobalDefinitions.ValidateFieldData(expectedAvailabilityHours, actualAvailabilityHours, "Availability Hour");
 
         }
+        
 
         //Select the Availability Target in Profile Section
         internal void SelectEarnTarget()
@@ -239,31 +205,15 @@ namespace MarsFramework
 
         internal void ValidateAvailabilityTarget()
         {
-            try
-            {
-                //Get the expected Availability Target
+              //Get the expected Availability Target
                 string expectedAvailabilityTarget = ExcelLib.ReadData(2, "AvailabilityTarget");
 
                 //Get the Actual Availability Target
                 string actualAvailabilityTarget = driver.FindElement(By.XPath("//strong[text()='Earn Target']/../..//div[@class='right floated content']")).Text;
 
-                if (expectedAvailabilityTarget == actualAvailabilityTarget)
-                {
-                    Base.test.Log(LogStatus.Pass, "Availability Target Selected Successful");
-                    SaveScreenShotClass.SaveScreenshot(driver, "Select Availability Target");
-                    Assert.IsTrue(true);
-                }
-                else
-                {
-                    Base.test.Log(LogStatus.Fail, "Select Availability Target-Test Failed");
-                    Assert.IsTrue(false);
-                }
+            //Validate the selected Availability Target
+            GlobalDefinitions.ValidateFieldData(expectedAvailabilityTarget, actualAvailabilityTarget, "Availability Target");
 
-            }
-            catch (Exception e)
-            {
-                Base.test.Log(LogStatus.Fail, "Caught Exception For Availability Target", e.Message);
-            }
 
 
         }
@@ -282,31 +232,15 @@ namespace MarsFramework
         }
         internal void ValidateDescription()
         {
-            try
-            {
+            
                 //Get the expected Description
                 string expectedDescription = ExcelLib.ReadData(2, "Description");
 
                 //Get the Actual Description
                 string actualDescription = driver.FindElement(By.XPath("//h3[text()='Description']/../span")).Text;
 
-                if (expectedDescription == actualDescription)
-                {
-                    Base.test.Log(LogStatus.Pass, "Description Entered Successful");
-                    SaveScreenShotClass.SaveScreenshot(driver, "Enter Description");
-                    Assert.IsTrue(true);
-                }
-                else
-                {
-                    Base.test.Log(LogStatus.Fail, "Enter Description-Test Failed");
-                    Assert.IsTrue(false);
-                }
-
-            }
-            catch (Exception e)
-            {
-                Base.test.Log(LogStatus.Fail, "Caught Exception For Enter Description", e.Message);
-            }
+            //Validate the Entered Description
+            GlobalDefinitions.ValidateFieldData(expectedDescription, actualDescription, "Description");
 
 
         }
