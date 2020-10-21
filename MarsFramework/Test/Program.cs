@@ -3,6 +3,7 @@ using MarsFramework.Pages;
 using NUnit.Framework;
 using RelevantCodes.ExtentReports;
 using System;
+using static MarsFramework.Global.GlobalDefinitions;
 
 namespace MarsFramework
 {
@@ -12,11 +13,11 @@ namespace MarsFramework
         [Category("Sprint1")]
         class User : Global.Base
         {
-            [Test]
+            [Test, Order(1)]
             public void AddProfileDetailsTest()
             {
                 // Start Add test. (Reports)
-                test = extent.StartTest("Add Profile Details Test");
+                test = extent.StartTest("Add Profile Details");
 
                 //Populate the excel data
                 GlobalDefinitions.ExcelLib.PopulateInCollection(Base.ExcelPathProfile, "Profile");
@@ -25,7 +26,7 @@ namespace MarsFramework
                 Profile profile = new Profile();
                 profile.SelectAvailability();
                 profile.ValidateAvailabilityType();
-
+             
                 //Call SelectHours Method to select Hours
                 profile.SelectHours();
                 profile.ValidateAvailabilityHours();
@@ -37,9 +38,10 @@ namespace MarsFramework
                 //Call AddDescription Method to add description
                 profile.AddDescription();
                 profile.ValidateDescription();
-            }
 
-            [Test]
+               }
+
+            [Test, Order(6)]
             public void ChangePasswordTest()
             {
                 // Start Add test. (Reports)
@@ -48,17 +50,19 @@ namespace MarsFramework
                 //Populate the excel data
                 GlobalDefinitions.ExcelLib.PopulateInCollection(Base.ExcelPathShareSkill, "SignIn");
 
+                //Call ChangePassword Method to Change Password
                 Profile profile = new Profile();
-               // profile.NavigateToProfileTab();
                 profile.ChangePassword();
+
+                //Call ValidateChangedPassword Method to validate the password changed
                 profile.ValidateChangedPassword();
             }
 
-             [Test]
+             [Test,Order(2)]
             public void LanguageTest()
             {
                 // Start Add test. (Reports)
-                test = extent.StartTest("Add, Update and Delete Language");
+                test = extent.StartTest("Profile Language");
 
                 //Populate the excel data
                 GlobalDefinitions.ExcelLib.PopulateInCollection(Base.ExcelPathProfile, "Language");
@@ -79,11 +83,11 @@ namespace MarsFramework
                 language.ValidateDeleteLanguage();
 
             }
-            [Test]
+            [Test, Order(3)]
             public void SkillTest()
             {
                 // Start Add test. (Reports)
-                test = extent.StartTest("Add, Update and delete Skill");
+                test = extent.StartTest("Profile Skill");
 
                 //Populate the excel data
                 GlobalDefinitions.ExcelLib.PopulateInCollection(Base.ExcelPathProfile, "Skill");
@@ -104,11 +108,11 @@ namespace MarsFramework
                 skill.ValidateDeleteSkill();
 
             }
-            [Test]
+            [Test, Order(4)]
             public void EducationTest()
             {
                 // Start Add test. (Reports)
-                test = extent.StartTest("Add, Update and Delete Education");
+                test = extent.StartTest("Profile Education");
 
                 //Populate the excel data
                 GlobalDefinitions.ExcelLib.PopulateInCollection(Base.ExcelPathProfile, "Education");
@@ -130,11 +134,11 @@ namespace MarsFramework
 
             }
 
-            [Test]
+            [Test, Order(5)]
             public void CertificationsTest()
             {
                 // Start Add test. (Reports)
-                test = extent.StartTest("Add, Update and Delete Certification");
+                test = extent.StartTest("Profile Certification");
 
                 //Populate the excel data
                 GlobalDefinitions.ExcelLib.PopulateInCollection(Base.ExcelPathProfile, "Certification");
@@ -157,7 +161,7 @@ namespace MarsFramework
 
             }
 
-            [Test]
+            [Test, Order(7)]
             public void AddShareSkillTest()
             {
                 // Start Add test. (Reports)
@@ -169,7 +173,7 @@ namespace MarsFramework
             }
 
 
-            [Test]
+            [Test, Order(8)]
             public void EditShareSkillTest()
             {
                 // Start Edit test. (Reports)
@@ -181,7 +185,7 @@ namespace MarsFramework
             }
 
 
-            [Test]
+            [Test, Order(9)]
             public void DeleteShareSkillTest()
             {
                 // Start Delete test. (Reports)
@@ -190,6 +194,22 @@ namespace MarsFramework
                 //Call DeleteShareSkill Method to Delete the Share Skill
                 ManageListings manageListings = new ManageListings();
                 manageListings.DeleteShareSkill();
+
+            }
+
+            [Test, Order(10)]
+            public void SearchShareSkillTest()
+            {
+                // Start Delete test. (Reports)
+                test = extent.StartTest("Search Shared Skill");
+
+                //Call AddShareSkill Method to Add the Share Skill
+                ShareSkill shareSkill = new ShareSkill();
+                shareSkill.AddShareSkill();
+
+                //Call SearchSharedSkill method to search the shared skill
+                Profile profile = new Profile();
+                profile.SearchSharedSkill();
 
             }
 

@@ -27,10 +27,10 @@ namespace MarsFramework.Global
         //MessageValidation method will matches the expected pop up message with actual pop up message
         public static void MessageValidation(string expectedMessage)
         {
-            WaitForElementDisplayed(driver, By.ClassName("ns-box-inner"), 2);
-            IWebElement Message = driver.FindElement(By.ClassName("ns-box-inner"));
+            WaitForElementDisplayed(Driver, By.ClassName("ns-box-inner"), 2);
+            IWebElement Message = Driver.FindElement(By.ClassName("ns-box-inner"));
             string actualMessage = Message.Text;
-            driver.FindElement(By.XPath("//a[@class='ns-close']")).Click();
+            Driver.FindElement(By.XPath("//a[@class='ns-close']")).Click();
             Assert.AreEqual(expectedMessage, actualMessage);
            
         }

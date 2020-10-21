@@ -46,23 +46,26 @@ namespace MarsFramework.Pages
 
         public Certifications()
         {
-            PageFactory.InitElements(driver, this);
+            PageFactory.InitElements(Driver, this);
         }
+
+        //Navigate to Certification tab
         internal void NavigateToCertificationTab()
         {
-            Extension.WaitForElementDisplayed(driver, By.LinkText("Certifications"), 2);
+            Extension.WaitForElementDisplayed(Driver, By.LinkText("Certifications"), 2);
             CertificationTab.Click();
         }
 
+        //Add new certifiaction
         internal void AddNewCertification()
         {
-            Extension.WaitForElementDisplayed(driver, By.XPath("//h3[contains(text(),'Certification')]/../..//div[text()='Add New']"), 2);
+            Extension.WaitForElementDisplayed(Driver, By.XPath("//h3[contains(text(),'Certification')]/../..//div[text()='Add New']"), 2);
 
             //Click Add New button 
             AddNewCertificationButton.Click();
 
             //Enter the Certification Details
-            Extension.WaitForElementDisplayed(driver, By.Name("certificationName"), 2);
+            Extension.WaitForElementDisplayed(Driver, By.Name("certificationName"), 2);
             AddCertificationName.SendKeys(ExcelLib.ReadData(2, "CertificationName"));
             AddCertificationFrom.SendKeys(ExcelLib.ReadData(2, "CertificationFrom"));
             SelectDropDown(ChooseCertificationYear, "SelectByValue", ExcelLib.ReadData(2, "CertificationYear"));
@@ -70,11 +73,14 @@ namespace MarsFramework.Pages
             //Click Add button
             AddCertificationButton.Click();
 
+            Base.Image = SaveScreenShotClass.SaveScreenshot(Driver, "Report");
+
             //Validate message
             Extension.MessageValidation(ExcelLib.ReadData(2, "CertificationName") + " has been added to your certification");
 
         }
 
+        //Update the existing Certification
         internal void UpdateCertification()
         {
 
@@ -82,20 +88,20 @@ namespace MarsFramework.Pages
             String expectedValue = ExcelLib.ReadData(2, "CertificationName");
 
             //Get the rows count in Certification table
-            IList<IWebElement> Tablerows = driver.FindElements(By.XPath("//h3[contains(text(),'Certification')]/../..//table/tbody/tr"));
+            IList<IWebElement> Tablerows = Driver.FindElements(By.XPath("//h3[contains(text(),'Certification')]/../..//table/tbody/tr"));
             var rowCount = Tablerows.Count;
 
             //Get the actual Certification value and compare with Certification needs to be updated, if matches update the record
             for (int i = 1; i <= rowCount; i++)
             {
-                String actualValue = driver.FindElement(By.XPath("//h3[contains(text(),'Certification')]/../..//tbody[" + i + "]/tr/td[1]")).Text;
+                String actualValue = Driver.FindElement(By.XPath("//h3[contains(text(),'Certification')]/../..//tbody[" + i + "]/tr/td[1]")).Text;
                 if (expectedValue == actualValue)
                 {
                     //Click on Edit icon
-                    driver.FindElement(By.XPath("//h3[contains(text(),'Certification')]/../..//tbody[" + i + "]/tr/td[4]/span[1]/i")).Click();
+                    Driver.FindElement(By.XPath("//h3[contains(text(),'Certification')]/../..//tbody[" + i + "]/tr/td[4]/span[1]/i")).Click();
 
                     //Clear the existing value and add new value 
-                    Extension.WaitForElementDisplayed(driver, By.Name("certificationName"), 2);
+                    Extension.WaitForElementDisplayed(Driver, By.Name("certificationName"), 2);
                     AddCertificationName.Clear();
                     AddCertificationName.SendKeys(ExcelLib.ReadData(2, "UpdateCertificationName"));
                     AddCertificationFrom.Clear();
@@ -105,6 +111,8 @@ namespace MarsFramework.Pages
                     //Click update button
                     UpdateCertificationButton.Click();
 
+                    Base.Image = SaveScreenShotClass.SaveScreenshot(Driver, "Report");
+
                     //Validate message
                     Extension.MessageValidation(ExcelLib.ReadData(2, "UpdateCertificationName") + " has been updated to your certification");
 
@@ -113,6 +121,7 @@ namespace MarsFramework.Pages
             }
         }
 
+        //Delete the existing certification
         internal void DeleteCertification()
         {
 
@@ -120,17 +129,19 @@ namespace MarsFramework.Pages
             String expectedValue = ExcelLib.ReadData(2, "UpdateCertificationName");
 
             //Get the rows count in Certification table
-            IList<IWebElement> Tablerows = driver.FindElements(By.XPath("//h3[contains(text(),'Certification')]/../..//table/tbody/tr"));
+            IList<IWebElement> Tablerows = Driver.FindElements(By.XPath("//h3[contains(text(),'Certification')]/../..//table/tbody/tr"));
             var rowCount = Tablerows.Count;
 
             //Get the actual Certification value and compare with Certification needs to be updated, if matches delete the record
             for (int i = 1; i <= rowCount; i++)
             {
-                String actualValue = driver.FindElement(By.XPath("//h3[contains(text(),'Certification')]/../..//tbody[" + i + "]/tr/td[1]")).Text;
+                String actualValue = Driver.FindElement(By.XPath("//h3[contains(text(),'Certification')]/../..//tbody[" + i + "]/tr/td[1]")).Text;
                 if (expectedValue == actualValue)
                 {
                     //CliCk on Delete icon
-                    driver.FindElement(By.XPath("//h3[contains(text(),'Certification')]/../..//tbody[" + i + "]/tr/td[4]/span[2]/i")).Click();
+                    Driver.FindElement(By.XPath("//h3[contains(text(),'Certification')]/../..//tbody[" + i + "]/tr/td[4]/span[2]/i")).Click();
+
+                    Base.Image = SaveScreenShotClass.SaveScreenshot(Driver, "Report");
 
                     //Validate message
                     Extension.MessageValidation(ExcelLib.ReadData(2, "UpdateCertificationName") + " has been deleted from your certification");
@@ -146,85 +157,48 @@ namespace MarsFramework.Pages
             isCertificationFound = false;
 
             //Get all the Certification records
-            IList<IWebElement> CertificationRecords = driver.FindElements(By.XPath("//h3[contains(text(),'Certification')]/../..//table/tbody/tr"));
+            IList<IWebElement> CertificationRecords = Driver.FindElements(By.XPath("//h3[contains(text(),'Certification')]/../..//table/tbody/tr"));
 
             //if the expected and actual Certification matches, set the isCertificationFound to true
             for (int j = 1; j <= CertificationRecords.Count; j++)
             {
-                String actualCertificationName = driver.FindElement(By.XPath("//h3[contains(text(),'Certification')]/../..//table/tbody[" + j + "]/tr/td[1]")).Text;
-                String actualCertificationFrom = driver.FindElement(By.XPath("//h3[contains(text(),'Certification')]/../..//table/tbody[" + j + "]/tr/td[2]")).Text;
+                String actualCertificationName = Driver.FindElement(By.XPath("//h3[contains(text(),'Certification')]/../..//table/tbody[" + j + "]/tr/td[1]")).Text;
+                String actualCertificationFrom = Driver.FindElement(By.XPath("//h3[contains(text(),'Certification')]/../..//table/tbody[" + j + "]/tr/td[2]")).Text;
                 if (expectedCertificationName == actualCertificationName && expectedCertificationFrom == actualCertificationFrom)
                 {
+                   
                     isCertificationFound = true;
                     break;
                 }
             }
 
         }
+
         //Validate the Certification added is dispalyed in the listing
         internal void ValidateAddedCertification()
         {
             SearchCertification(ExcelLib.ReadData(2, "CertificationName"), ExcelLib.ReadData(2, "CertificationFrom"));
-            try
-            {
-                if (isCertificationFound == true)
-                {
-                    Base.test.Log(LogStatus.Pass, "Certification Added Successful");
-                    SaveScreenShotClass.SaveScreenshot(driver, "Add Certification");
-                    Assert.IsTrue(true);
-                }
-                else
-                    Base.test.Log(LogStatus.Fail, "Add Certification-Test Failed");
-            }
 
-            catch (Exception e)
-            {
-                Base.test.Log(LogStatus.Fail, "Caught Exception For Add Certification", e.Message);
-            }
+            GlobalDefinitions.ValidateBoolean(isCertificationFound, "Certification Added");
+           
         }
 
         //Validate the Certification Updated is dispalyed in the listing
         internal void ValidateUpdateCertification()
         {
             SearchCertification(ExcelLib.ReadData(2, "UpdateCertificationName"), ExcelLib.ReadData(2, "UpdateCertificationFrom"));
-            try
-            {
-                if (isCertificationFound == true)
-                {
-                    Base.test.Log(LogStatus.Pass, "Certification Updated Successful");
-                    SaveScreenShotClass.SaveScreenshot(driver, "Update Certification");
-                    Assert.IsTrue(true);
-                }
-                else
-                    Base.test.Log(LogStatus.Fail, "Update Certification-Test Failed");
-            }
 
-            catch (Exception e)
-            {
-                Base.test.Log(LogStatus.Fail, "Caught Exception For Update Certification", e.Message);
-            }
+            GlobalDefinitions.ValidateBoolean(isCertificationFound, "Certification Updated");
+
         }
 
         //Validate the Certification Deleted is not dispalyed in the listing
         internal void ValidateDeleteCertification()
         {
             SearchCertification(ExcelLib.ReadData(2, "UpdateCertificationName"), ExcelLib.ReadData(2, "UpdateCertificationFrom"));
-            try
-            {
-                if (isCertificationFound == false)
-                {
-                    Base.test.Log(LogStatus.Pass, "Certification Deleted Successful");
-                    SaveScreenShotClass.SaveScreenshot(driver, "Delete Certification");
-                    Assert.IsTrue(true);
-                }
-                else
-                    Base.test.Log(LogStatus.Fail, "Delete Skill-Test Failed");
-            }
 
-            catch (Exception e)
-            {
-                Base.test.Log(LogStatus.Fail, "Caught Exception For Delete Certification", e.Message);
-            }
+            GlobalDefinitions.ValidateBoolean(!(isCertificationFound), "Certification Deleted");
+            
         }
 
 

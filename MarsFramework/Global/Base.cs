@@ -3,6 +3,7 @@ using MarsFramework.Pages;
 
 using MongoDB.Driver.Core.Authentication;
 using NUnit.Framework;
+using NUnit.Framework.Interfaces;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
 using RelevantCodes.ExtentReports;
@@ -29,6 +30,8 @@ namespace MarsFramework.Global
         public static ExtentReports extent;
         #endregion
 
+        public static string Image;
+
         #region setup and tear down
         [SetUp]
         public void Inititalize()
@@ -39,11 +42,11 @@ namespace MarsFramework.Global
             {
 
                 case 1:
-                    GlobalDefinitions.driver = new FirefoxDriver();
+                    GlobalDefinitions.Driver = new FirefoxDriver();
                     break;
                 case 2:
-                    GlobalDefinitions.driver = new ChromeDriver();
-                    GlobalDefinitions.driver.Manage().Window.Maximize();
+                    GlobalDefinitions.Driver = new ChromeDriver();
+                    GlobalDefinitions.Driver.Manage().Window.Maximize();
                     break;
 
             }
@@ -63,7 +66,7 @@ namespace MarsFramework.Global
             else
             {
                 SignUp obj = new SignUp();
-                obj.register();
+                obj.Register();
             }
 
         }
@@ -72,15 +75,22 @@ namespace MarsFramework.Global
         [TearDown]
         public void TearDown()
         {
-            
+
+            if (TestContext.CurrentContext.Result.Outcome == ResultState.Success)
+            {
+                // Screenshot
+
+                test.Log(LogStatus.Pass, "Image example: " + Image);
+            }
+
             // end test. (Reports)
             extent.EndTest(test);
            
             // calling Flush writes everything to the log file (Reports)
             extent.Flush();
             // Close the driver :)            
-            GlobalDefinitions.driver.Close();
-            GlobalDefinitions.driver.Quit();
+            GlobalDefinitions.Driver.Close();
+            GlobalDefinitions.Driver.Quit();
         }
         #endregion
 

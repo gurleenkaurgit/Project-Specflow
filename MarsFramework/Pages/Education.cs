@@ -43,7 +43,6 @@ namespace MarsFramework.Pages
         [FindsBy(How = How.Name, Using = "yearOfGraduation")]
         private IWebElement YearOfGraduation { get; set; }
 
-
         //Click Add Education Button
         [FindsBy(How = How.XPath, Using = "//input[@value='Add']")]
         private IWebElement AddEducationButton { get; set; }
@@ -55,32 +54,37 @@ namespace MarsFramework.Pages
         private static bool isEducationFound;
         public Education()
         {
-            PageFactory.InitElements(driver, this);
+            PageFactory.InitElements(Driver, this);
         }
+
+        //Navigate to Education tab
         internal void NavigateToEducationTab()
         {
-            Extension.WaitForElementDisplayed(driver, By.LinkText("Education"), 5);
+            Extension.WaitForElementDisplayed(Driver, By.LinkText("Education"), 5);
 
             EducationTab.Click();
         }
+
+        //Add new Education
         internal void AddNewEducation()
         {
-            Extension.WaitForElementDisplayed(driver, By.XPath("//h3[contains(text(),'Education')]/../..//div[text()='Add New']"), 5);
-            
+            Extension.WaitForElementDisplayed(Driver, By.XPath("//h3[contains(text(),'Education')]/../..//div[text()='Add New']"), 5);
+
             //Click Add New Education 
             AddNewEducationButton.Click();
 
             //Enter the Education details
-            Extension.WaitForElementDisplayed(driver, By.Name("instituteName"), 2);
+            Extension.WaitForElementDisplayed(Driver, By.Name("instituteName"), 2);
             CollegeUniversityName.SendKeys(ExcelLib.ReadData(2, "InstituteName"));
             SelectDropDown(Country, "SelectByText", ExcelLib.ReadData(2, "Country"));
             SelectDropDown(Title, "SelectByText", ExcelLib.ReadData(2, "Title"));
             Degree.SendKeys(ExcelLib.ReadData(2, "Degree"));
             SelectDropDown(YearOfGraduation, "SelectByValue", ExcelLib.ReadData(2, "YearOfGraduation"));
 
-
             //Click Add button
             AddEducationButton.Click();
+
+            Base.Image = SaveScreenShotClass.SaveScreenshot(Driver, "Report");
 
             //Validate message
             Extension.MessageValidation("Education has been added");
@@ -88,28 +92,27 @@ namespace MarsFramework.Pages
         }
         internal void UpdateEducation()
         {
-
             //Get the Education value needs to be updated
             string expectedInstituteName = ExcelLib.ReadData(2, "InstituteName");
             string expectedTitle = ExcelLib.ReadData(2, "Title");
 
             //Get the rows count in Education table
-            IList<IWebElement> Tablerows = driver.FindElements(By.XPath("//h3[contains(text(),'Education')]/../..//table/tbody/tr"));
+            IList<IWebElement> Tablerows = Driver.FindElements(By.XPath("//h3[contains(text(),'Education')]/../..//table/tbody/tr"));
             var rowCount = Tablerows.Count;
 
             //Get the actual Education value and compare with Education needs to be updated, if matches update the record
             for (int i = 1; i <= rowCount; i++)
             {
-                string actualInstituteName = driver.FindElement(By.XPath("//h3[contains(text(),'Education')]/../..//table/tbody[" + i + "]/tr/td[2]")).Text;
-                string actualTitle = driver.FindElement(By.XPath("//h3[contains(text(),'Education')]/../..//table/tbody[" + i + "]/tr/td[3]")).Text;
+                string actualInstituteName = Driver.FindElement(By.XPath("//h3[contains(text(),'Education')]/../..//table/tbody[" + i + "]/tr/td[2]")).Text;
+                string actualTitle = Driver.FindElement(By.XPath("//h3[contains(text(),'Education')]/../..//table/tbody[" + i + "]/tr/td[3]")).Text;
 
-                if (expectedInstituteName.ToLower() == actualInstituteName.ToLower() && expectedTitle.ToLower()==actualTitle.ToLower())
+                if (expectedInstituteName.ToLower() == actualInstituteName.ToLower() && expectedTitle.ToLower() == actualTitle.ToLower())
                 {
                     //Click on Edit icon
-                    driver.FindElement(By.XPath("//h3[contains(text(),'Education')]/../..//table/tbody[" + i + "]/tr/td[6]/span[1]/i")).Click();
+                    Driver.FindElement(By.XPath("//h3[contains(text(),'Education')]/../..//table/tbody[" + i + "]/tr/td[6]/span[1]/i")).Click();
 
                     //Clear the existing values and add new value 
-                    Extension.WaitForElementDisplayed(driver, By.Name("instituteName"), 2);
+                    Extension.WaitForElementDisplayed(Driver, By.Name("instituteName"), 2);
                     CollegeUniversityName.Clear();
                     CollegeUniversityName.SendKeys(ExcelLib.ReadData(2, "UpdateInstituteName"));
                     SelectDropDown(Country, "SelectByText", ExcelLib.ReadData(2, "UpdateCountry"));
@@ -120,6 +123,8 @@ namespace MarsFramework.Pages
 
                     //Click update button
                     UpdateEducationButton.Click();
+
+                    Base.Image = SaveScreenShotClass.SaveScreenshot(Driver, "Report");
 
                     //Validate message
                     Extension.MessageValidation("Education as been updated");
@@ -136,18 +141,20 @@ namespace MarsFramework.Pages
             String expectedTitle = ExcelLib.ReadData(2, "UpdateTitle");
 
             //Get the rows count in Education table
-            IList<IWebElement> Tablerows = driver.FindElements(By.XPath("//h3[contains(text(),'Education')]/../..//table/tbody/tr"));
+            IList<IWebElement> Tablerows = Driver.FindElements(By.XPath("//h3[contains(text(),'Education')]/../..//table/tbody/tr"));
             var rowCount = Tablerows.Count;
 
             //Get the actual Education value and compare with Education needs to be updated, if matches delete the record
             for (int i = 1; i <= rowCount; i++)
             {
-                String actualInstituteName = driver.FindElement(By.XPath("//h3[contains(text(),'Education')]/../..//table/tbody[" + i + "]/tr/td[2]")).Text;
-                String actualTitle = driver.FindElement(By.XPath("//h3[contains(text(),'Education')]/../..//table/tbody[" + i + "]/tr/td[3]")).Text;
-                if (expectedInstituteName == actualInstituteName && expectedTitle== actualTitle)
+                String actualInstituteName = Driver.FindElement(By.XPath("//h3[contains(text(),'Education')]/../..//table/tbody[" + i + "]/tr/td[2]")).Text;
+                String actualTitle = Driver.FindElement(By.XPath("//h3[contains(text(),'Education')]/../..//table/tbody[" + i + "]/tr/td[3]")).Text;
+                if (expectedInstituteName == actualInstituteName && expectedTitle == actualTitle)
                 {
                     //CliCk on Delete icon
-                    driver.FindElement(By.XPath("//h3[contains(text(),'Education')]/../..//table/tbody[" + i + "]/tr/td[6]/span[2]/i")).Click();
+                    Driver.FindElement(By.XPath("//h3[contains(text(),'Education')]/../..//table/tbody[" + i + "]/tr/td[6]/span[2]/i")).Click();
+
+                    Base.Image = SaveScreenShotClass.SaveScreenshot(Driver, "Report");
 
                     //Validate message
                     Extension.MessageValidation("Education entry successfully removed");
@@ -164,13 +171,13 @@ namespace MarsFramework.Pages
 
             Thread.Sleep(2000);
             //Get all the Education records
-            IList<IWebElement> EducationRecords = driver.FindElements(By.XPath("//h3[contains(text(),'Education')]/../..//table/tbody/tr"));
+            IList<IWebElement> EducationRecords = Driver.FindElements(By.XPath("//h3[contains(text(),'Education')]/../..//table/tbody/tr"));
 
             //if the expected and actual Education matches, set the isEducationFound to true
             for (int j = 1; j <= EducationRecords.Count; j++)
             {
-                string actualInstituteName = driver.FindElement(By.XPath("//h3[contains(text(),'Education')]/../..//table/tbody[" + j + "]/tr/td[2]")).Text;
-                string actualTitle = driver.FindElement(By.XPath("//h3[contains(text(),'Education')]/../..//table/tbody[" + j + "]/tr/td[3]")).Text;
+                string actualInstituteName = Driver.FindElement(By.XPath("//h3[contains(text(),'Education')]/../..//table/tbody[" + j + "]/tr/td[2]")).Text;
+                string actualTitle = Driver.FindElement(By.XPath("//h3[contains(text(),'Education')]/../..//table/tbody[" + j + "]/tr/td[3]")).Text;
                 Console.WriteLine("actualInstituteName {0}", actualInstituteName);
                 Console.WriteLine("actualTitle {0}", actualTitle);
                 Console.WriteLine("expectedInstituteName {0}", expectedInstituteName);
@@ -188,80 +195,33 @@ namespace MarsFramework.Pages
         internal void ValidateAddedEducation()
         {
             SearchEducation(ExcelLib.ReadData(2, "InstituteName"), ExcelLib.ReadData(2, "Title"));
-            try
-            {
-                if (isEducationFound == true)
-                {
-                    Base.test.Log(LogStatus.Pass, "Education Added Successful");
-                    SaveScreenShotClass.SaveScreenshot(driver, "Add Education");
-                    Assert.IsTrue(true);
-                }
-                else
-                {
-                    Base.test.Log(LogStatus.Fail, "Add Education-Test Failed");
-                    Assert.IsTrue(false);
-                }
-            }
 
-            catch (Exception e)
-            {
-                Base.test.Log(LogStatus.Fail, "Caught Exception For Add Education", e.Message);
-            }
+            GlobalDefinitions.ValidateBoolean(isEducationFound, "Education Added");
+
+
         }
 
         //Validate the Education Updated is dispalyed in the listing
         internal void ValidateUpdateEducation()
         {
             SearchEducation(ExcelLib.ReadData(2, "UpdateInstituteName"), ExcelLib.ReadData(2, "UpdateTitle"));
-            try
-            {
-                if (isEducationFound == true)
-                {
-                    Base.test.Log(LogStatus.Pass, "Education Updated Successful");
-                    SaveScreenShotClass.SaveScreenshot(driver, "Update Education");
-                    Assert.IsTrue(true);
-                }
-                else
-                {
-                    Base.test.Log(LogStatus.Fail, "Update Education-Test Failed");
-                    Assert.IsTrue(false);
-                }
-                }
 
-            catch (Exception e)
-            {
-                Base.test.Log(LogStatus.Fail, "Caught Exception For Update Education", e.Message);
-            }
+            GlobalDefinitions.ValidateBoolean(isEducationFound, "Education Updated");
+
         }
 
         //Validate the Education Deleted is not dispalyed in the listing
         internal void ValidateDeleteEducation()
         {
             SearchEducation(ExcelLib.ReadData(2, "UpdateInstituteName"), ExcelLib.ReadData(2, "UpdateTitle"));
-            try
-            {
-                if (isEducationFound == false)
-                {
-                    Base.test.Log(LogStatus.Pass, "Education Deleted Successful");
-                    SaveScreenShotClass.SaveScreenshot(driver, "Delete Education");
-                    Assert.IsTrue(true);
-                }
-                else
-                {
-                    Base.test.Log(LogStatus.Fail, "Delete Education-Test Failed");
-                    Assert.IsTrue(false);
-                }
-                }
 
-            catch (Exception e)
-            {
-                Base.test.Log(LogStatus.Fail, "Caught Exception For Delete Education", e.Message);
-            }
+            GlobalDefinitions.ValidateBoolean(!(isEducationFound), "Education Deleted");
+
         }
     }
 }
-            
-    
+
+
 
 
 

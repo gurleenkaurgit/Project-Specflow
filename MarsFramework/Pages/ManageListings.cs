@@ -14,54 +14,46 @@ namespace MarsFramework.Pages
 {
     internal class ManageListings
     {
-        public ManageListings()
-        {
-            PageFactory.InitElements(Global.GlobalDefinitions.driver, this);
-        }
-
         //Click on Manage Listings Link
         [FindsBy(How = How.LinkText, Using = "Manage Listings")]
         private IWebElement ManageListingsLink { get; set; }
 
         //Get Pagination Buttons
         [FindsBy(How = How.XPath, Using = "//div[@class='ui buttons semantic-ui-react-button-pagination']/button")]
-        private IList<IWebElement> paginationButtons { get; set; }
+        private IList<IWebElement> PaginationButtons { get; set; }
 
         //Click Next Button
         [FindsBy(How = How.XPath, Using = "//button[contains(text(),'>')]")]
-        private IWebElement nextButton { get; set; }
+        private IWebElement NextButton { get; set; }
 
         //Get Listing rows
         [FindsBy(How = How.XPath, Using = "//div[@id='listing-management-section']//table//tbody//tr")]
-        private IList<IWebElement> tableRows { get; set; }
-
-        //View the listing
-        [FindsBy(How = How.XPath, Using = "(//i[@class='eye icon'])[1]")]
-        private IWebElement view { get; set; }
-
-        //Delete the listing
-        [FindsBy(How = How.XPath, Using = "//table[1]/tbody[1]")]
-        private IWebElement delete { get; set; }
+        private IList<IWebElement> TableRows { get; set; }
 
         //Edit the listing
         [FindsBy(How = How.XPath, Using = "(//i[@class='outline write icon'])[1]")]
-        private IWebElement edit { get; set; }
+        private IWebElement Edit { get; set; }
 
         //Click on Yes or No
         [FindsBy(How = How.XPath, Using = "//div[@class='actions']")]
-        private IWebElement clickActionsButton { get; set; }
+        private IWebElement ClickActionsButton { get; set; }
 
-        private string img { get; set; }
+        public ManageListings()
+        {
+            PageFactory.InitElements(Global.GlobalDefinitions.Driver, this);
+        }
 
+        //Navigate to Manage Listing page
         internal void NavigateToManageListing()
         {
             //Wait till Manage Listing is visible
-            Extension.WaitForElementDisplayed(GlobalDefinitions.driver, By.LinkText("Manage Listings"), 5);
-            
+            Extension.WaitForElementDisplayed(GlobalDefinitions.Driver, By.LinkText("Manage Listings"), 5);
+
             //Click Manage Listing Link
             ManageListingsLink.Click();
         }
 
+        //Check if existing Share SKill is present
         internal void CheckExistingSkillPresent()
         {
             //Navigate to Manage Listings
@@ -70,8 +62,8 @@ namespace MarsFramework.Pages
             //Creating Share Skill Object
             ShareSkill shareSkill = new ShareSkill();
             Thread.Sleep(1000);
-           
-            if (tableRows.Count < 1)
+
+            if (TableRows.Count < 1)
             {
                 //Add a Share Skill
                 shareSkill.AddShareSkill();
@@ -97,61 +89,42 @@ namespace MarsFramework.Pages
             Thread.Sleep(2000);
 
             //Click the Edit icon 
-            edit.Click();
+            Edit.Click();
 
             //Call EditShareSkillData method to add Edit data
             shareSkill.EditShareSkillData();
 
-            //Call ValidateShareSkillData Method to Validate entered Share Skill data
-           // shareSkill.ValidateShareSkillData();
-
             //Call SaveShareSkill Method to save the Share Skill
-            string img = shareSkill.SaveShareSkill();
+            shareSkill.SaveShareSkill();
 
             //Call SearchListings Method to get count for records with same category,title and description as we edited
             int MatchingRecordsAfterEdit = SearchListings(GlobalDefinitions.ExcelLib.ReadData(2, "Category"), GlobalDefinitions.ExcelLib.ReadData(2, "Title"), GlobalDefinitions.ExcelLib.ReadData(2, "Description"));
-            Console.WriteLine("MatchingRecordsBeforeEdit== {0}", MatchingRecordsBeforeEdit);
-            Console.WriteLine("MatchingRecordsBeforeEdit== {0}", MatchingRecordsAfterEdit);
 
             //checking if number of records with same category,title and description is 1 more than it has before
             int ExpectedRecords = MatchingRecordsBeforeEdit + 1;
-            try
-            {
-                if (ExpectedRecords == MatchingRecordsAfterEdit)
-                {
-                    Base.test.Log(LogStatus.Pass, "Test Passed, Edited a Share Skill Successfully");
-                    Base.test.Log(LogStatus.Pass, "Image-" + img);
-                   Assert.IsTrue(true);
-                }
-                else
-                {
-                    Base.test.Log(LogStatus.Fail, "Test Failed, Edited a Share Skill Successfully" + img);
+            GlobalDefinitions.ValidateBoolean(ExpectedRecords == MatchingRecordsAfterEdit, "Share Skill Edited");
 
-                }
-            }
-            catch (Exception e)
-            {
-                Base.test.Log(LogStatus.Fail, "Test Failed, Edited a Share Skill Successfully", e.Message);
-            }
 
         }
+
+        //Delete the Share skill
         internal void DeleteShareSkill()
         {
             //Populate the excel data
             GlobalDefinitions.ExcelLib.PopulateInCollection(Base.ExcelPathManageListing, "ManageListings");
-                      
+
             //Get the Category, Title, Description and Action for Deletion
             string CategoryToDelete = GlobalDefinitions.ExcelLib.ReadData(2, "Category");
             string TitleToDelete = GlobalDefinitions.ExcelLib.ReadData(2, "Title");
             string DescriptionToDelete = GlobalDefinitions.ExcelLib.ReadData(2, "Description");
-            string Action= GlobalDefinitions.ExcelLib.ReadData(2, "Deleteaction");
+            string Action = GlobalDefinitions.ExcelLib.ReadData(2, "Deleteaction");
 
             //Navigate to Manage Listing
             NavigateToManageListing();
 
             //Call SearchListings Method to get count for existing records with same category,title and description as we are going to Delete
             int MatchingRecordsBeforeDelete = SearchListings(CategoryToDelete, TitleToDelete, DescriptionToDelete);
-            Console.WriteLine("MatchingRecordsBeforeDelete== {0}", MatchingRecordsBeforeDelete);
+            //Console.WriteLine("MatchingRecordsBeforeDelete== {0}", MatchingRecordsBeforeDelete);
             if (MatchingRecordsBeforeDelete < 1)
             {
                 ShareSkill shareSkill = new ShareSkill();
@@ -164,46 +137,29 @@ namespace MarsFramework.Pages
             NavigateToManageListing();
 
             //Calling DeleteRecord to delete Share Skill
-            DeleteRecord(CategoryToDelete, TitleToDelete, DescriptionToDelete,Action);
+            DeleteRecord(CategoryToDelete, TitleToDelete, DescriptionToDelete, Action);
 
             //Call SearchListings Method to get count for existing records with same category,title and description as we have Deleted
             int MatchingRecordsAfterDelete = SearchListings(CategoryToDelete, TitleToDelete, DescriptionToDelete);
             int ExpectedRecords = MatchingRecordsBeforeDelete - 1;
-            Console.WriteLine("MatchingRecordsBeforeDelete== {0}", MatchingRecordsBeforeDelete);
-            Console.WriteLine("MatchingRecordsAfterDelete =={0}", MatchingRecordsAfterDelete);
 
             //checking if number of records with same category,title and description is 1 less than it has before
-            try
-            {
-                if (ExpectedRecords == MatchingRecordsAfterDelete)
-                {
-                    Base.test.Log(LogStatus.Pass, "Test Passed, Deleted a Share Skill Successfully");
-                    Base.test.Log(LogStatus.Pass, "Image-" + img);
-                    Assert.IsTrue(true);
-                }
-                else
-                {
-                    Base.test.Log(LogStatus.Fail, "Test Failed, Deleted a Share Skill Successfully" + img);
-
-                }
-            }
-            catch (Exception e)
-            {
-                Base.test.Log(LogStatus.Fail, "Test Failed, Deleted a Share Skill Successfully", e.Message);
-            }
+            GlobalDefinitions.ValidateBoolean(ExpectedRecords == MatchingRecordsAfterDelete, "Share Skill Deleted");
 
         }
-        internal void DeleteRecord(string CategoryToDelete, string TitleToDelete, string DescriptionToDelete,string Action)
+
+        //Delete the Share SKill 
+        internal void DeleteRecord(string CategoryToDelete, string TitleToDelete, string DescriptionToDelete, string Action)
         {
             Thread.Sleep(2000);
 
             //loop through the pages
-            for (int i = 0; i < paginationButtons.Count - 2; i++)
+            for (int i = 0; i < PaginationButtons.Count - 2; i++)
             {
                 Thread.Sleep(2000);
 
                 //Check the Category, Title and Description values for each row in a page, if matches delete the record
-                foreach (IWebElement listingRecord in tableRows)
+                foreach (IWebElement listingRecord in TableRows)
                 {
                     string Category = listingRecord.FindElement(By.XPath("td[2]")).Text;
                     string Title = listingRecord.FindElement(By.XPath("td[3]")).Text;
@@ -211,37 +167,28 @@ namespace MarsFramework.Pages
                     if (Category == CategoryToDelete && Title == TitleToDelete && Description == DescriptionToDelete)
                     {
                         listingRecord.FindElement(By.CssSelector("i.remove.icon")).Click();
-                        clickActionsButton.FindElement(By.XPath("//*[text()='" + Action+ "']")).Click();
-                        img = SaveScreenShotClass.SaveScreenshot(GlobalDefinitions.driver, "Report");
-                        string text = GlobalDefinitions.driver.FindElement(By.ClassName("ns-box-inner")).Text;
-                        try
-                        {
-                            if (text.Contains("has been deleted"))
-                            {
-                                Base.test.Log(LogStatus.Pass, text );
-                                Assert.IsTrue(true);
-                            }
-                            else
-                            {
-                                Base.test.Log(LogStatus.Fail, text);
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            Base.test.Log(LogStatus.Fail, text, e.Message);
-                        }
+                        ClickActionsButton.FindElement(By.XPath("//*[text()='" + Action + "']")).Click();
+
+                        Extension.WaitForElementDisplayed(GlobalDefinitions.Driver, By.ClassName("ns-box-inner"), 5);
+
+                        Base.Image = SaveScreenShotClass.SaveScreenshot(Driver, "Report");
+
+                        string text = Driver.FindElement(By.ClassName("ns-box-inner")).Text;
+
+                        GlobalDefinitions.ValidateBoolean(text.Contains("has been deleted"), text);
+
                         return;
 
                     }
                     //If Next button is enable click it to Navigate to next page
-                    
+
                 }
-                if (nextButton.Enabled == true)
+                if (NextButton.Enabled == true)
                 {
-                    nextButton.Click();
+                    NextButton.Click();
                 }
             }
-            Base.test.Log(LogStatus.Fail, "Did not delete any record ");
+            Base.test.Log(LogStatus.Fail, "Did not deleted any record ");
 
         }
 
@@ -251,15 +198,15 @@ namespace MarsFramework.Pages
         {
             //Initialize the Record count to 0
             int RecordFound = 0;
-            Thread.Sleep(1000);
+            Thread.Sleep(2000);
 
             //loop through the pages 
-            for (int i = 0; i < paginationButtons.Count - 2; i++)
+            for (int i = 0; i < PaginationButtons.Count - 2; i++)
             {
-                Thread.Sleep(1000);
+                Thread.Sleep(2000);
 
                 //Check the Category, Title and Description values for each row in a page, if matches increment the record found variable
-                foreach (IWebElement listingRecord in tableRows)
+                foreach (IWebElement listingRecord in TableRows)
                 {
                     string Category = listingRecord.FindElement(By.XPath("td[2]")).Text;
                     string Title = listingRecord.FindElement(By.XPath("td[3]")).Text;
@@ -272,9 +219,9 @@ namespace MarsFramework.Pages
                 }
 
                 //If Next button is enable click it to Navigate to next page
-                if (nextButton.Enabled == true)
+                if (NextButton.Enabled == true)
                 {
-                    nextButton.Click();
+                    NextButton.Click();
                 }
             }
 

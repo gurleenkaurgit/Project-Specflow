@@ -1,7 +1,6 @@
 ﻿using Excel;
 using OpenQA.Selenium;
 using System;
-
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
@@ -24,20 +23,20 @@ namespace MarsFramework.Global
     {
         public GlobalDefinitions()
         {
-            PageFactory.InitElements(driver, this);
+            PageFactory.InitElements(Driver, this);
         }
-        
+
         //Initialise the browser
-        public static IWebDriver driver { get; set; }
+        public static IWebDriver Driver { get; set; }
 
         //Navigate to URL
         public static void NavigateUrl()
         {
-            driver.Navigate().GoToUrl(GlobalDefinitions.ExcelLib.ReadData(2, "Url"));
+            Driver.Navigate().GoToUrl(GlobalDefinitions.ExcelLib.ReadData(2, "Url"));
         }
 
         //Generic method for drop-down selection
-        public static void SelectDropDown(IWebElement dropDownElement, String selectBY, String bY )
+        public static void SelectDropDown(IWebElement dropDownElement, String selectBY, String bY)
         {
             SelectElement dropDown = new SelectElement(dropDownElement);
             dropDown.SelectByIndex(0);
@@ -68,7 +67,7 @@ namespace MarsFramework.Global
             }
 
         }
-       
+
         //Generic method to Validate Text fields data
         public static void ValidateFieldData(String expectedValue, String actualValue, String fieldName)
         {
@@ -81,7 +80,7 @@ namespace MarsFramework.Global
                 }
                 else
                 {
-                    Base.test.Log(LogStatus.Fail, fieldName + " Entered Failed, Image - " + SaveScreenShotClass.SaveScreenshot(GlobalDefinitions.driver, "Report"));
+                    Base.test.Log(LogStatus.Fail, fieldName + " Entered Failed, Image - " + SaveScreenShotClass.SaveScreenshot(GlobalDefinitions.Driver, "Report"));
                     Assert.IsTrue(false);
                 }
             }
@@ -107,7 +106,7 @@ namespace MarsFramework.Global
 
                 else
                 {
-                    Base.test.Log(LogStatus.Fail, dropDownFieldName + " Selection Failed, Image - " + SaveScreenShotClass.SaveScreenshot(GlobalDefinitions.driver, "Report"));
+                    Base.test.Log(LogStatus.Fail, dropDownFieldName + " Selection Failed, Image - " + SaveScreenShotClass.SaveScreenshot(GlobalDefinitions.Driver, "Report"));
                     Assert.IsTrue(false);
                 }
             }
@@ -134,10 +133,10 @@ namespace MarsFramework.Global
                         }
                         else
                         {
-                            Base.test.Log(LogStatus.Fail, radiobuttonsFieldName + " Selection Failed, Image - " + SaveScreenShotClass.SaveScreenshot(GlobalDefinitions.driver, "Report"));
+                            Base.test.Log(LogStatus.Fail, radiobuttonsFieldName + " Selection Failed, Image - " + SaveScreenShotClass.SaveScreenshot(GlobalDefinitions.Driver, "Report"));
                             Assert.IsTrue(false);
                         }
-                            
+
                     }
             }
             catch (Exception e)
@@ -146,7 +145,30 @@ namespace MarsFramework.Global
             }
         }
 
-        
+        //Generic method to Validate Boolean expression
+        public static void ValidateBoolean(bool expression, string boolField)
+        {
+            try
+            {
+                if (expression)
+                {
+                    Base.test.Log(LogStatus.Pass, boolField + " Successfully");
+                    Assert.IsTrue(true);
+                }
+
+                else
+                {
+                    Base.test.Log(LogStatus.Fail, boolField + " - Failed, Image - " + SaveScreenShotClass.SaveScreenshot(GlobalDefinitions.Driver, "Report"));
+                    Assert.IsTrue(false);
+                }
+            }
+
+            catch (Exception e)
+            {
+                Base.test.Log(LogStatus.Fail, "Caught Exception For " + boolField, e.Message);
+            }
+
+        }
 
 
         #region Excel 
@@ -156,9 +178,9 @@ namespace MarsFramework.Global
 
             public class Datacollection
             {
-                public int rowNumber { get; set; }
-                public string colName { get; set; }
-                public string colValue { get; set; }
+                public int RowNumber { get; set; }
+                public string ColName { get; set; }
+                public string ColValue { get; set; }
             }
 
 
@@ -199,10 +221,10 @@ namespace MarsFramework.Global
                 {
                     //Retriving Data using LINQ to reduce much of iterations
 
-                    rowNumber = rowNumber - 1;
+                    rowNumber -= 1;
                     string data = (from colData in dataCol
-                                   where colData.colName == columnName && colData.rowNumber == rowNumber
-                                   select colData.colValue).SingleOrDefault();
+                                   where colData.ColName == columnName && colData.RowNumber == rowNumber
+                                   select colData.ColValue).SingleOrDefault();
 
                     //var datas = dataCol.Where(x => x.colName == columnName && x.rowNumber == rowNumber).SingleOrDefault().colValue;
 
@@ -230,9 +252,9 @@ namespace MarsFramework.Global
                     {
                         Datacollection dtTable = new Datacollection()
                         {
-                            rowNumber = row,
-                            colName = table.Columns[col].ColumnName,
-                            colValue = table.Rows[row - 1][col].ToString()
+                            RowNumber = row,
+                            ColName = table.Columns[col].ColumnName,
+                            ColValue = table.Rows[row - 1][col].ToString()
                         };
 
 

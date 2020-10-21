@@ -8,7 +8,7 @@ namespace MarsFramework.Pages
     {
         public SignUp()
         {
-            PageFactory.InitElements(Global.GlobalDefinitions.driver, this);
+            PageFactory.InitElements(Global.GlobalDefinitions.Driver, this);
         }
 
         #region  Initialize Web Elements 
@@ -45,7 +45,7 @@ namespace MarsFramework.Pages
         private IWebElement JoinBtn { get; set; }
         #endregion
 
-        internal void register()
+        internal void Register()
         {
             //Populate the excel data
             GlobalDefinitions.ExcelLib.PopulateInCollection(Base.ExcelPathShareSkill, "SignUp");

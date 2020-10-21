@@ -23,11 +23,6 @@ namespace MarsFramework.Pages
 {
     internal class ShareSkill
     {
-        public ShareSkill()
-        {
-            PageFactory.InitElements(Global.GlobalDefinitions.driver, this);
-        }
-
         //Click on ShareSkill Button
         [FindsBy(How = How.LinkText, Using = "Share Skill")]
         private IWebElement ShareSkillButton { get; set; }
@@ -80,18 +75,6 @@ namespace MarsFramework.Pages
         [FindsBy(How = How.XPath, Using = "//label[text()='Start date']/../../..")]
         private IWebElement Days { get; set; }
 
-        //Storing the starttime
-        [FindsBy(How = How.XPath, Using = "//div[3]/div[2]/input[1]")]
-        private IWebElement StartTime { get; set; }
-
-        //Click on StartTime dropdown
-        [FindsBy(How = How.XPath, Using = "//div[3]/div[2]/input[1]")]
-        private IWebElement StartTimeDropDown { get; set; }
-              
-        //Click on EndTime dropdown
-        [FindsBy(How = How.XPath, Using = "//div[3]/div[3]/input[1]")]
-        private IWebElement EndTimeDropDown { get; set; }
-
         //Click on Skill Trade option
         [FindsBy(How = How.XPath, Using = "//form/div[8]/div[@class='twelve wide column']/div/div[@class = 'field']")]
         private IList<IWebElement> SkillTradeOption { get; set; }
@@ -124,18 +107,22 @@ namespace MarsFramework.Pages
         [FindsBy(How = How.CssSelector, Using = ".ReactTags__remove")]
         private IList<IWebElement> RemoveTags { get; set; }
 
-      
+        public ShareSkill()
+        {
+            PageFactory.InitElements(Global.GlobalDefinitions.Driver, this);
+        }
 
+        //Click Share SKill Button
         internal void ClickShareSkillButton()
         {
-
             //Wait for ShareSkill Button
-            Extension.WaitForElementDisplayed(GlobalDefinitions.driver,By.LinkText("Share Skill"),5);
+            Extension.WaitForElementDisplayed(GlobalDefinitions.Driver, By.LinkText("Share Skill"), 5);
 
             //Click ShareSkill Button
             ShareSkillButton.Click();
         }
 
+        //Enter Share Skill Data
         internal void EnterShareSkillData()
         {
             //Enter the Title
@@ -152,42 +139,21 @@ namespace MarsFramework.Pages
 
             //Enter Tags
             Tags.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "Tags") + "\n");
-                        
+
             //Select Service Type
             GlobalDefinitions.SelectRadioButton(ServiceTypeOptions, GlobalDefinitions.ExcelLib.ReadData(2, "ServiceType"), By.Name("serviceType"));
 
             //Select Location Type
             GlobalDefinitions.SelectRadioButton(LocationTypeOption, GlobalDefinitions.ExcelLib.ReadData(2, "LocationType"), By.Name("locationType"));
-                       
+
             //Add Start Date
             StartDateDropDown.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "Startdate"));
 
-           //Add End Date
+            //Add End Date
             EndDateDropDown.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "Enddate"));
 
-            //Getting all the values in Selectday column in a list
-            IList<string> DaysList = GlobalDefinitions.ExcelLib.ReadData(2, "Selectday").Split('/');
-
-            //Getting count for all days 
-            //Check the checkbox for selectdays mentioned in excel and enter time for same
-            int DaysRows = Days.FindElements(By.Name("Available")).Count;
-            foreach (string AvailableDays in DaysList)
-            {
-                for (int i = 1; i <= DaysRows; i++)
-                {
-                    string DayValue = Days.FindElements(By.ClassName("fields"))[i].Text;
-                    if (AvailableDays.ToLower() == DayValue.ToLower())
-                    {
-                        Days.FindElements(By.Name("Available"))[i - 1].Click();
-                        string StartTime = DateTime.Parse(GlobalDefinitions.ExcelLib.ReadData(2, "Starttime")).ToString("hh:mmtt");
-                        Days.FindElements(By.Name("StartTime"))[i - 1].SendKeys(StartTime);
-
-                        string EndTime = DateTime.Parse(GlobalDefinitions.ExcelLib.ReadData(2, "Endtime")).ToString("hh:mmtt");
-                        Days.FindElements(By.Name("EndTime"))[i - 1].SendKeys(EndTime);
-                        break;
-                    }
-                }
-            }
+            //Select days and Enter start and End time
+            EnterDaysAndTime();
 
             //Select Skill Trade
             GlobalDefinitions.SelectRadioButton(SkillTradeOption, GlobalDefinitions.ExcelLib.ReadData(2, "SkillTrade"), By.Name("skillTrades"));
@@ -209,13 +175,15 @@ namespace MarsFramework.Pages
             AutoItX.WinWait("Open", "File Upload", 1);
             AutoItX.WinActivate("Open");
             AutoItX.ControlFocus("Open", "File Upload", "[CLASS:Edit; INSTANCE:1]");
-            AutoItX.Send(Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "..\\..\\ExcelData\\empty.txt"));       
+            AutoItX.Send(Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "..\\..\\ExcelData\\empty.txt"));
             AutoItX.Send("{Enter}");
 
             //Select Active radio
             GlobalDefinitions.SelectRadioButton(ActiveOption, GlobalDefinitions.ExcelLib.ReadData(2, "Active"), By.Name("isActive"));
-                       
+
         }
+
+        //Validate the Entered Shared Skill Data
         internal void ValidateShareSkillData()
         {
 
@@ -253,13 +221,13 @@ namespace MarsFramework.Pages
             ValidateRadioButton(SkillTradeOption, By.Name("skillTrades"), GlobalDefinitions.ExcelLib.ReadData(2, "SkillTrade"), "SkillTrade");
             try
             {
-                
+
                 if (GlobalDefinitions.ExcelLib.ReadData(2, "SkillTrade").ToUpper() == "SKILL-EXCHANGE")
                 {
                     //Validate Skill Exchange
                     GlobalDefinitions.ValidateFieldData(GlobalDefinitions.ExcelLib.ReadData(2, "Skill-Exchange"), SkillExchangeTag.Text.Replace(EnteredTag.FindElement(By.XPath("./*")).Text, ""), "Skill-Exchange");
                 }
-                else if(GlobalDefinitions.ExcelLib.ReadData(2, "SkillTrade").ToUpper() == "CREDIT")
+                else if (GlobalDefinitions.ExcelLib.ReadData(2, "SkillTrade").ToUpper() == "CREDIT")
                 {
                     GlobalDefinitions.ValidateFieldData(GlobalDefinitions.ExcelLib.ReadData(2, "Credit"), CreditAmount.GetAttribute("value"), "Credit");
                 }
@@ -277,6 +245,36 @@ namespace MarsFramework.Pages
             GlobalDefinitions.ValidateRadioButton(ActiveOption, By.Name("isActive"), GlobalDefinitions.ExcelLib.ReadData(2, "Active"), "Active");
 
         }
+
+        //Select Days and Enter the Time for days selected
+        internal void EnterDaysAndTime()
+        {
+            //Getting all the values in Selectday column in a list
+            IList<string> DaysList = GlobalDefinitions.ExcelLib.ReadData(2, "Selectday").Split('/');
+
+            //Getting count for all days 
+            //Check the checkbox for selectdays mentioned in excel and enter time for same
+            int DaysRows = Days.FindElements(By.Name("Available")).Count;
+            foreach (string AvailableDays in DaysList)
+            {
+                for (int i = 1; i <= DaysRows; i++)
+                {
+                    string DayValue = Days.FindElements(By.ClassName("fields"))[i].Text;
+                    if (AvailableDays.ToLower() == DayValue.ToLower())
+                    {
+                        Days.FindElements(By.Name("Available"))[i - 1].Click();
+                        string StartTime = DateTime.Parse(GlobalDefinitions.ExcelLib.ReadData(2, "Starttime")).ToString("hh:mmtt");
+                        Days.FindElements(By.Name("StartTime"))[i - 1].SendKeys(StartTime);
+
+                        string EndTime = DateTime.Parse(GlobalDefinitions.ExcelLib.ReadData(2, "Endtime")).ToString("hh:mmtt");
+                        Days.FindElements(By.Name("EndTime"))[i - 1].SendKeys(EndTime);
+                        break;
+                    }
+                }
+            }
+        }
+
+        //Validate the selected days and entered time for days
         internal void ValidateDaysAndTime()
         {
             try
@@ -293,34 +291,28 @@ namespace MarsFramework.Pages
                         string DayValue = Days.FindElements(By.ClassName("fields"))[i].Text;
                         if (AvailableDays.ToLower() == DayValue.ToLower())
                         {
-                            Console.WriteLine("Selected {0}", Days.FindElements(By.Name("Available"))[i - 1].Selected);
-                            Console.WriteLine("First Start date check {0} {1}", Days.FindElements(By.Name("StartTime"))[i - 1].GetAttribute("value"), DateTime.Parse(GlobalDefinitions.ExcelLib.ReadData(2, "Starttime")).ToString("HH:mm"));
-                            if (Days.FindElements(By.Name("Available"))[i - 1].Selected && Days.FindElements(By.Name("StartTime"))[i - 1].GetAttribute("value") == DateTime.Parse(GlobalDefinitions.ExcelLib.ReadData(2, "Starttime")).ToString("HH:mm") && Days.FindElements(By.Name("EndTime"))[i - 1].GetAttribute("value") == DateTime.Parse(GlobalDefinitions.ExcelLib.ReadData(2, "Endtime")).ToString("HH:mm"))
-                            {
-                                Base.test.Log(LogStatus.Pass, DayValue + " is selected and Time is Entered Successfully");
-                                Assert.IsTrue(true);
-                            }
-                            else
-                                Base.test.Log(LogStatus.Fail, DayValue + " is not selected or Time Entered Failed, Image - " + SaveScreenShotClass.SaveScreenshot(GlobalDefinitions.driver, "Report"));
-
+                            bool isTimeMatches = Days.FindElements(By.Name("Available"))[i - 1].Selected && Days.FindElements(By.Name("StartTime"))[i - 1].GetAttribute("value") == DateTime.Parse(GlobalDefinitions.ExcelLib.ReadData(2, "Starttime")).ToString("HH:mm") && Days.FindElements(By.Name("EndTime"))[i - 1].GetAttribute("value") == DateTime.Parse(GlobalDefinitions.ExcelLib.ReadData(2, "Endtime")).ToString("HH:mm");
+                            GlobalDefinitions.ValidateBoolean(isTimeMatches, DayValue + " is selected and Time is Entered");
+                           
                         }
                     }
                 }
             }
             catch (Exception e)
             {
-                Base.test.Log(LogStatus.Fail, "Caught Exception For Day and Time" , e.Message);
+                Base.test.Log(LogStatus.Fail, "Caught Exception For Day and Time", e.Message);
             }
         }
 
-        internal string SaveShareSkill()
+        //Save the Share skill
+        internal void SaveShareSkill()
         {
             //Click Save
             Save.Click();
-
-            //Return the screenshot
-            return SaveScreenShotClass.SaveScreenshot(GlobalDefinitions.driver, "Report");
+            Base.Image = SaveScreenShotClass.SaveScreenshot(Driver, "Report");
         }
+
+        //Add Share skill
         internal void AddShareSkill()
         {
             //Populate the excel data
@@ -332,8 +324,8 @@ namespace MarsFramework.Pages
 
             //Call SearchListings Method to get count for existing records with same category,title and description as we are going to add
             int MatchingRecordsBeforeAdd = manageListings.SearchListings(GlobalDefinitions.ExcelLib.ReadData(2, "Category"), GlobalDefinitions.ExcelLib.ReadData(2, "Title"), GlobalDefinitions.ExcelLib.ReadData(2, "Description"));
-                      
-           //Click Share Skill Button
+
+            //Click Share Skill Button
             ClickShareSkillButton();
 
             //Call EnterShareSkillData Method to enter Share Skill data
@@ -342,39 +334,23 @@ namespace MarsFramework.Pages
             //Call ValidateShareSkillData Method to Validate entered Share Skill data
             ValidateShareSkillData();
 
-            //Call SaveShareSkill Method to save the Share Skill
-            String img =SaveShareSkill();
+            //Save Share Skill
+            SaveShareSkill();
 
             //Call SearchListings Method to get count for records with same category,title and description as we added
             int MatchingRecordsAfterAdd = manageListings.SearchListings(GlobalDefinitions.ExcelLib.ReadData(2, "Category"), GlobalDefinitions.ExcelLib.ReadData(2, "Title"), GlobalDefinitions.ExcelLib.ReadData(2, "Description"));
-            Console.WriteLine("MatchingRecordsBeforeAdd== {0}", MatchingRecordsBeforeAdd);
-            Console.WriteLine("MatchingRecordsAfterAdd =={0}", MatchingRecordsAfterAdd);
-
+            
             //checking if number of records with same category,title and description is 1 more than it has before
             int ExpectedRecords = MatchingRecordsBeforeAdd + 1;
-            try
-            {
-                if (ExpectedRecords == MatchingRecordsAfterAdd)
-                {
-                    Base.test.Log(LogStatus.Pass, "Test Passed, Added a Share Skill Successfully" );
-                    Base.test.Log(LogStatus.Pass, "Image-" + img);
-                    Assert.IsTrue(true);
-                }
-                else
-                {
-                    Base.test.Log(LogStatus.Fail, "Test Failed, Added a Share Skill Successfully" + img);
 
-                }
-            }
-            catch (Exception e)
-            {
-                Base.test.Log(LogStatus.Fail, "Test Failed, Added a Share Skill Successfully", e.Message);
-            }
+            GlobalDefinitions.ValidateBoolean(ExpectedRecords == MatchingRecordsAfterAdd, "Share Skill Added");
+            
         }
 
+        //Edit the Existing share Skill
         internal void EditShareSkillData()
         {
-            Extension.WaitForElementDisplayed(driver, By.Name("title"), 5);
+            Extension.WaitForElementDisplayed(Driver, By.Name("title"), 5);
             //Clear the Title
             Title.Clear();
 
@@ -387,22 +363,14 @@ namespace MarsFramework.Pages
             //Enter the Description
             Description.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "Description"));
 
-            CategoryDropDown.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "Category"));
-
-            //Deselect the Category drop down
-            //CategoryDropDown.Click();
-
-            //Extension.WaitForElementDisplayed(driver, By.Name("categoryId"), 5);
-            // Extension.WaitForElementClickable
-
             //Select Category
-            // GlobalDefinitions.SelectDropDown(CategoryDropDown, "SelectByText", GlobalDefinitions.ExcelLib.ReadData(2, "Category"));
+            CategoryDropDown.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "Category"));
 
             //Select Sub-Category
             GlobalDefinitions.SelectDropDown(SubCategoryDropDown, "SelectByText", GlobalDefinitions.ExcelLib.ReadData(2, "SubCategory"));
 
             //Clear the Entered tag
-            foreach(IWebElement removeTag in RemoveTags)
+            foreach (IWebElement removeTag in RemoveTags)
             {
                 removeTag.Click();
             }
@@ -422,13 +390,13 @@ namespace MarsFramework.Pages
             //Add End Date
             EndDateDropDown.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "Enddate"));
 
-          //Clear the Available days data
+            //Clear the Available days data
 
             int DaysRows = Days.FindElements(By.Name("Available")).Count;
 
             for (int i = 1; i <= DaysRows; i++)
             {
-                if(Days.FindElements(By.Name("Available"))[i - 1].Selected)
+                if (Days.FindElements(By.Name("Available"))[i - 1].Selected)
                 {
                     Days.FindElements(By.Name("Available"))[i - 1].Click();
                     Days.FindElements(By.Name("StartTime"))[i - 1].SendKeys(Keys.Delete);
@@ -438,29 +406,8 @@ namespace MarsFramework.Pages
 
             }
 
-                //Getting all the values in Selectday column in a list
-                IList<string> DaysList = GlobalDefinitions.ExcelLib.ReadData(2, "Selectday").Split('/');
-
-            //Getting count for all days 
-            //Check the checkbox for selectdays mentioned in excel and enter time for same
-            
-            foreach (string AvailableDays in DaysList)
-            {
-                for (int i = 1; i <= DaysRows; i++)
-                {
-                    string DayValue = Days.FindElements(By.ClassName("fields"))[i].Text;
-                    if (AvailableDays.ToLower() == DayValue.ToLower())
-                    {
-                        Days.FindElements(By.Name("Available"))[i - 1].Click();
-                        string StartTime = DateTime.Parse(GlobalDefinitions.ExcelLib.ReadData(2, "Starttime")).ToString("hh:mmtt");
-                        Days.FindElements(By.Name("StartTime"))[i - 1].SendKeys(StartTime);
-
-                        string EndTime = DateTime.Parse(GlobalDefinitions.ExcelLib.ReadData(2, "Endtime")).ToString("hh:mmtt");
-                        Days.FindElements(By.Name("EndTime"))[i - 1].SendKeys(EndTime);
-                        break;
-                    }
-                }
-            }
+            //Select days and Enter start and End time
+            EnterDaysAndTime();
 
             //Select Skill Trade
             GlobalDefinitions.SelectRadioButton(SkillTradeOption, GlobalDefinitions.ExcelLib.ReadData(2, "SkillTrade"), By.Name("skillTrades"));
@@ -479,7 +426,7 @@ namespace MarsFramework.Pages
                 CreditAmount.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "Credit"));
             }
 
-          
+
             //Select Active radio
             GlobalDefinitions.SelectRadioButton(ActiveOption, GlobalDefinitions.ExcelLib.ReadData(2, "Active"), By.Name("isActive"));
 
