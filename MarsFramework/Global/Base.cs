@@ -9,10 +9,12 @@ using OpenQA.Selenium.Firefox;
 using RelevantCodes.ExtentReports;
 using System;
 using System.IO;
+using TechTalk.SpecFlow;
 using static MarsFramework.Global.GlobalDefinitions;
 
 namespace MarsFramework.Global
 {
+    [Binding]
     class Base
     {
         #region To access Path from resource file
@@ -33,8 +35,8 @@ namespace MarsFramework.Global
         public static string Image;
 
         #region setup and tear down
-        [SetUp]
-        public void Inititalize()
+        [BeforeTestRun]
+        public static void Inititalize()
         {
 
             // advisasble to read this documentation before proceeding http://extentreports.relevantcodes.com/net/
@@ -71,25 +73,28 @@ namespace MarsFramework.Global
 
         }
 
-
-        [TearDown]
-        public void TearDown()
-        {
-
-            if (TestContext.CurrentContext.Result.Outcome == ResultState.Success)
+        [AfterScenario]
+        public void ImageLink()
             {
-                // Screenshot
+               Console.WriteLine("NUnit.Framework.TestContext.CurrentContext.Result.Outcome" + NUnit.Framework.TestContext.CurrentContext.Result.Outcome);
+            Console.WriteLine("ResultState.Success" + ResultState.Success);
 
-                test.Log(LogStatus.Pass, "Image example: " + Image);
+            if (NUnit.Framework.TestContext.CurrentContext.Result.Outcome == ResultState.Success)
+            {
+                Base.test.Log(LogStatus.Pass, "Image example: " + Base.Image);
             }
+}
 
-            // end test. (Reports)
+        [AfterTestRun]
+        public static void TearDown()
+        {
+             // end test. (Reports)
             extent.EndTest(test);
            
             // calling Flush writes everything to the log file (Reports)
             extent.Flush();
             // Close the driver :)            
-            GlobalDefinitions.Driver.Close();
+           // GlobalDefinitions.Driver.Close();
             GlobalDefinitions.Driver.Quit();
         }
         #endregion

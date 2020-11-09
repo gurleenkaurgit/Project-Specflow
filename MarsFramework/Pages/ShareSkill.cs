@@ -9,7 +9,7 @@ using AutoIt;
 using System.Threading;
 using NUnit.Core;
 using MongoDB.Driver.Core.Authentication;
-using static MarsFramework.Program;
+//using static MarsFramework.Program;
 using static MarsFramework.Global.GlobalDefinitions;
 using RelevantCodes.ExtentReports;
 using System.Linq;
