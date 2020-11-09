@@ -51,7 +51,7 @@ namespace MarsFramework.Pages
         //Navigate to SKill tab
         internal void NavigateToSkillTab()
         {
-            Extension.WaitForElementDisplayed(Driver, By.XPath("//a[contains(text(),'Skills')]"), 2);
+            Extension.WaitForElementDisplayed(Driver, By.XPath("//a[contains(text(),'Skills')]"), 5);
             SkillTab.Click();
         }
 

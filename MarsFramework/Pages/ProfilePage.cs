@@ -128,11 +128,8 @@ namespace MarsFramework
 
         internal void NavigateToProfileTab()
         {
-            Extension.WaitForElementDisplayed(Driver, By.LinkText("Profile"), 2);
-            Actions action = new Actions(Driver);
-            action.Click(ProfileTab);
-
-            // ProfileTab.Click();
+            Extension.WaitForElementDisplayed(Driver, By.LinkText("Profile"), 5);
+            ProfileTab.Click();
         }
 
         //Select the Availability in Profile Section
