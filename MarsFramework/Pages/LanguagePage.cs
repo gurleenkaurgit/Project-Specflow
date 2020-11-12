@@ -2,6 +2,7 @@
 using MarsFramework.HookUp;
 using NUnit.Framework;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
 using RelevantCodes.ExtentReports;
 using SeleniumExtras.PageObjects;
@@ -51,7 +52,9 @@ namespace MarsFramework.Pages
         internal void NavigateToLanguageTab()
         {
             Extension.WaitForElementDisplayed(Driver, By.XPath("//a[contains(text(),'Languages')]"), 2);
-            LanguageTab.Click();
+            Actions action = new Actions(Driver);
+            action.MoveToElement(LanguageTab).Click(LanguageTab).Build().Perform();
+            
         }
         internal void AddNewLanguage()
         {
@@ -75,18 +78,15 @@ namespace MarsFramework.Pages
 
         internal void CheckLanguageExists()
         {
+            //Populate the excel data
+            GlobalDefinitions.ExcelLib.PopulateInCollection(Base.ExcelPathProfile, "Language");
+
             SearchLanguage(ExcelLib.ReadData(2, "Language"), ExcelLib.ReadData(2, "Level"));
 
             if (!isLanguageFound)
             {
                 LanguageSteps languageSteps = new LanguageSteps();
                 languageSteps.WhenIAddANewLanguage();
-                //Populate the excel data
-                //GlobalDefinitions.ExcelLib.PopulateInCollection(Base.ExcelPathProfile, "Language");
-
-                //Call AddNewLanguage Method to add a New Language
-                //AddNewLanguage();
-
             }
         }
 
@@ -184,7 +184,7 @@ namespace MarsFramework.Pages
         {
             SearchLanguage(ExcelLib.ReadData(2, "Language"), ExcelLib.ReadData(2, "Level"));
 
-            GlobalDefinitions.ValidateBoolean(isLanguageFound, "Language Added");
+            GlobalDefinitions.ValidateBoolean(isLanguageFound, "Added Language Exists in Listing-");
         }
 
         //Validate the Language Updated is dispalyed in the listing
@@ -192,7 +192,7 @@ namespace MarsFramework.Pages
         {
             SearchLanguage(ExcelLib.ReadData(2, "UpdateLanguage"), ExcelLib.ReadData(2, "UpdateLevel"));
 
-            GlobalDefinitions.ValidateBoolean(isLanguageFound, "Language Updated");
+            GlobalDefinitions.ValidateBoolean(isLanguageFound, "Updated Language Exists in Listing-");
         }
 
         //Validate the Language Deleted is not dispalyed in the listing
@@ -200,7 +200,7 @@ namespace MarsFramework.Pages
         {
             SearchLanguage(ExcelLib.ReadData(2, "Language"), ExcelLib.ReadData(2, "Level"));
 
-            GlobalDefinitions.ValidateBoolean(!(isLanguageFound), "Language Deleted");
+            GlobalDefinitions.ValidateBoolean(!(isLanguageFound), "Deleted Language Removes from Listing-");
 
         }
     }

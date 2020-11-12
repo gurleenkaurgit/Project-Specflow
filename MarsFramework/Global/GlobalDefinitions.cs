@@ -158,7 +158,7 @@ namespace MarsFramework.Global
 
                 else
                 {
-                    Base.test.Log(LogStatus.Fail, boolField + " - Failed, Image - " + SaveScreenShotClass.SaveScreenshot(GlobalDefinitions.Driver, "Report"));
+                    Base.test.Log(LogStatus.Fail, boolField + " Failed, Image - " + SaveScreenShotClass.SaveScreenshot(GlobalDefinitions.Driver, "Report"));
                     Assert.IsTrue(false);
                 }
             }

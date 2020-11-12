@@ -13,6 +13,7 @@ namespace MarsFramework.HookUp
         public void GivenIClickedOnTheSkillsTab()
         {
             skills = new SkillsPage();
+
             skills.NavigateToSkillTab();
 
             

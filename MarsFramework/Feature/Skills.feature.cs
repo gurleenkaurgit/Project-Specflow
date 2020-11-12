@@ -202,7 +202,7 @@ this.ScenarioInitialize(scenarioInfo);
    this.FeatureBackground();
 #line hidden
 #line 21
-    testRunner.Given("I have an existing Skill", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given("I have an existing Skill", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 22
  testRunner.When("I delete Skill", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");

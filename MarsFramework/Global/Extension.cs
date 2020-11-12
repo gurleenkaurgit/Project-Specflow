@@ -29,7 +29,7 @@ namespace MarsFramework.Global
         public static void MessageValidation(string expectedMessage)
         {
             
-                WaitForElementDisplayed(Driver, By.ClassName("ns-box-inner"), 2);
+                WaitForElementDisplayed(Driver, By.ClassName("ns-box-inner"), 5);
                 IWebElement Message = Driver.FindElement(By.ClassName("ns-box-inner"));
                 string actualMessage = Message.Text;
                 Driver.FindElement(By.XPath("//a[@class='ns-close']")).Click();

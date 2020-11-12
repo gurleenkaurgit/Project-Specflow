@@ -129,7 +129,9 @@ namespace MarsFramework
         internal void NavigateToProfileTab()
         {
             Extension.WaitForElementDisplayed(Driver, By.LinkText("Profile"), 5);
-            ProfileTab.Click();
+            Actions action = new Actions(Driver);
+            action.MoveToElement(ProfileTab).Click(ProfileTab).Build().Perform();
+            
         }
 
         //Select the Availability in Profile Section
@@ -164,7 +166,7 @@ namespace MarsFramework
             string actualAvailabilityType = Driver.FindElement(By.XPath("//strong[text()='Availability']/../..//div[@class='right floated content']")).Text;
 
             //Validate the selected Availability Type
-            GlobalDefinitions.ValidateFieldData(expectedAvailabilityType, actualAvailabilityType, "Availability Type");
+            GlobalDefinitions.ValidateFieldData(expectedAvailabilityType, actualAvailabilityType, expectedAvailabilityType +" is Shown in Availability Type Field-");
 
         }
 
@@ -199,7 +201,7 @@ namespace MarsFramework
             string actualAvailabilityHours = Driver.FindElement(By.XPath("//strong[text()='Hours']/../..//div[@class='right floated content']")).Text;
 
             //Validate the selected Availability Type
-            GlobalDefinitions.ValidateFieldData(expectedAvailabilityHours, actualAvailabilityHours, "Availability Hour");
+            GlobalDefinitions.ValidateFieldData(expectedAvailabilityHours, actualAvailabilityHours, expectedAvailabilityHours + " is Shown in Availability Hours Field-");
 
         }
 
@@ -234,7 +236,7 @@ namespace MarsFramework
             string actualAvailabilityTarget = Driver.FindElement(By.XPath("//strong[text()='Earn Target']/../..//div[@class='right floated content']")).Text;
 
             //Validate the selected Availability Target
-            GlobalDefinitions.ValidateFieldData(expectedAvailabilityTarget, actualAvailabilityTarget, "Availability Target");
+            GlobalDefinitions.ValidateFieldData(expectedAvailabilityTarget, actualAvailabilityTarget, expectedAvailabilityTarget + " is Shown in Earn Target Field-");
 
         }
 
@@ -264,7 +266,7 @@ namespace MarsFramework
             string actualDescription = Driver.FindElement(By.XPath("//h3[text()='Description']/../span")).Text;
 
             //Validate the Entered Description
-            GlobalDefinitions.ValidateFieldData(expectedDescription, actualDescription, "Description");
+            GlobalDefinitions.ValidateFieldData(expectedDescription, actualDescription, "Description Updated is Shown-");
 
 
         }
@@ -315,7 +317,7 @@ namespace MarsFramework
                 LoginBtn.Click();
                 Thread.Sleep(5000);
 
-                GlobalDefinitions.ValidateBoolean(ChangePasswordDropDownLink.Displayed, "Password Changed");
+                GlobalDefinitions.ValidateBoolean(ChangePasswordDropDownLink.Displayed, "Logged in with New Password-");
 
             }
             catch (Exception e)

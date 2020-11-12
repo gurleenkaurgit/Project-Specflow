@@ -154,6 +154,7 @@
     <Compile Include="HookUp\CertificationsSteps.cs" />
     <Compile Include="HookUp\EducationSteps.cs" />
     <Compile Include="HookUp\LanguageSteps.cs" />
+    <Compile Include="HookUp\ManageListingsSteps.cs" />
     <Compile Include="HookUp\ProfileSteps.cs" />
     <Compile Include="HookUp\ShareSkillSteps.cs" />
     <Compile Include="HookUp\SkillsSteps.cs" />
@@ -182,6 +183,7 @@
     <None Include="Feature\Certifications.feature" />
     <None Include="Feature\Education.feature" />
     <None Include="Feature\Language.feature" />
+    <None Include="Feature\ManageListings.feature" />
     <None Include="Feature\Profile.feature" />
     <None Include="Feature\ShareSkill.feature" />
     <None Include="Feature\Skills.feature" />

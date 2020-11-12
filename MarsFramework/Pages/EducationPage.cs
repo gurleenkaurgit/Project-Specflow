@@ -2,6 +2,7 @@
 using MarsFramework.HookUp;
 using NUnit.Framework;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
 using RelevantCodes.ExtentReports;
 using SeleniumExtras.PageObjects;
 using System;
@@ -62,12 +63,16 @@ namespace MarsFramework.Pages
         internal void NavigateToEducationTab()
         {
             Extension.WaitForElementDisplayed(Driver, By.LinkText("Education"), 5);
-
-            EducationTab.Click();
+            Actions action = new Actions(Driver);
+            action.MoveToElement(EducationTab).Click(EducationTab).Build().Perform();
+            
         }
 
         internal void CheckEducationExists()
         {
+            //Populate the excel data
+            GlobalDefinitions.ExcelLib.PopulateInCollection(Base.ExcelPathProfile, "Education");
+
             SearchEducation(ExcelLib.ReadData(2, "InstituteName"), ExcelLib.ReadData(2, "Title"));
             
 
@@ -212,7 +217,7 @@ namespace MarsFramework.Pages
         {
             SearchEducation(ExcelLib.ReadData(2, "InstituteName"), ExcelLib.ReadData(2, "Title"));
 
-            GlobalDefinitions.ValidateBoolean(isEducationFound, "Education Added");
+            GlobalDefinitions.ValidateBoolean(isEducationFound, "Added Education Exists in Listing-");
 
 
         }
@@ -222,7 +227,7 @@ namespace MarsFramework.Pages
         {
             SearchEducation(ExcelLib.ReadData(2, "UpdateInstituteName"), ExcelLib.ReadData(2, "UpdateTitle"));
 
-            GlobalDefinitions.ValidateBoolean(isEducationFound, "Education Updated");
+            GlobalDefinitions.ValidateBoolean(isEducationFound, "Updated Education Exists in Listing-");
 
         }
 
@@ -231,7 +236,7 @@ namespace MarsFramework.Pages
         {
             SearchEducation(ExcelLib.ReadData(2, "InstituteName"), ExcelLib.ReadData(2, "Title"));
 
-            GlobalDefinitions.ValidateBoolean(!(isEducationFound), "Education Deleted");
+            GlobalDefinitions.ValidateBoolean(!(isEducationFound), "Deleted Education Removes from Listing-");
 
         }
     }

@@ -119,7 +119,9 @@ namespace MarsFramework.Pages
             Extension.WaitForElementDisplayed(GlobalDefinitions.Driver, By.LinkText("Share Skill"), 5);
 
             //Click ShareSkill Button
-            ShareSkillButton.Click();
+            Actions action = new Actions(Driver);
+            action.MoveToElement(ShareSkillButton).Click(ShareSkillButton).Build().Perform();
+            
         }
 
         //Enter Share Skill Data
@@ -310,9 +312,10 @@ namespace MarsFramework.Pages
             //Click Save
             Save.Click();
             Base.Image = SaveScreenShotClass.SaveScreenshot(Driver, "Report");
+
         }
 
-        
+
         //Edit the Existing share Skill
         internal void EditShareSkillData()
         {

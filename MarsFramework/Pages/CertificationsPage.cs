@@ -2,6 +2,7 @@
 using MarsFramework.HookUp;
 using NUnit.Framework;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
 using RelevantCodes.ExtentReports;
 using SeleniumExtras.PageObjects;
 using System;
@@ -54,11 +55,16 @@ namespace MarsFramework.Pages
         internal void NavigateToCertificationTab()
         {
             Extension.WaitForElementDisplayed(Driver, By.LinkText("Certifications"), 2);
-            CertificationTab.Click();
+            Actions action = new Actions(Driver);
+            action.MoveToElement(CertificationTab).Click(CertificationTab).Build().Perform();
+           
         }
 
         internal void CheckCertificationExists()
         {
+            //Populate the excel data
+            GlobalDefinitions.ExcelLib.PopulateInCollection(Base.ExcelPathProfile, "Certification");
+
             SearchCertification(ExcelLib.ReadData(2, "CertificationName"), ExcelLib.ReadData(2, "CertificationFrom"));
 
             if (!isCertificationFound)
@@ -71,7 +77,7 @@ namespace MarsFramework.Pages
         //Add new certifiaction
         internal void AddNewCertification()
         {
-            Extension.WaitForElementDisplayed(Driver, By.XPath("//h3[contains(text(),'Certification')]/../..//div[text()='Add New']"), 2);
+            Extension.WaitForElementDisplayed(Driver, By.XPath("//h3[contains(text(),'Certification')]/../..//div[text()='Add New']"), 10);
 
             //Click Add New button 
             AddNewCertificationButton.Click();
@@ -193,7 +199,7 @@ namespace MarsFramework.Pages
         {
             SearchCertification(ExcelLib.ReadData(2, "CertificationName"), ExcelLib.ReadData(2, "CertificationFrom"));
 
-            GlobalDefinitions.ValidateBoolean(isCertificationFound, "Certification Added");
+            GlobalDefinitions.ValidateBoolean(isCertificationFound, "Added Certification Exists in Listing-");
            
         }
 
@@ -202,7 +208,7 @@ namespace MarsFramework.Pages
         {
             SearchCertification(ExcelLib.ReadData(2, "UpdateCertificationName"), ExcelLib.ReadData(2, "UpdateCertificationFrom"));
 
-            GlobalDefinitions.ValidateBoolean(isCertificationFound, "Certification Updated");
+            GlobalDefinitions.ValidateBoolean(isCertificationFound, "Updated Certification Exists in Listing-");
 
         }
 
@@ -211,7 +217,7 @@ namespace MarsFramework.Pages
         {
             SearchCertification(ExcelLib.ReadData(2, "CertificationName"), ExcelLib.ReadData(2, "CertificationFrom"));
 
-            GlobalDefinitions.ValidateBoolean(!(isCertificationFound), "Certification Deleted");
+            GlobalDefinitions.ValidateBoolean(!(isCertificationFound), "Deleted Certification Removes from Listing-");
             
         }
 

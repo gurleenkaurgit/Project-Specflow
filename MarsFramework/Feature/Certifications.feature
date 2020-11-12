@@ -6,6 +6,7 @@
 	  Background: 
 	  Given I clicked on the profile tab under Profile page
 	  And I clicked on the Certification tab
+	  
 
 @automation
 Scenario: Add Certification
@@ -18,6 +19,6 @@ Scenario: Update Certification
 	Then that updated Certification should be displayed on my listings
 
 Scenario: Delete Certification
-    Given I have an existing Certification
+	Given I have an existing Certification
 	When I delete Certification 
 	Then that deleted Certification should not be displayed on my listings

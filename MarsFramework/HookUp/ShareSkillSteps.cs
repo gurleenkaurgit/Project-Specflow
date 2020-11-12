@@ -29,7 +29,7 @@ namespace MarsFramework.HookUp
             shareSkill.ValidateShareSkillData();
             shareSkill.SaveShareSkill();
 
-
+            
         }
         
         [Then(@"that added Share Skill should be displayed on managelisting page")]

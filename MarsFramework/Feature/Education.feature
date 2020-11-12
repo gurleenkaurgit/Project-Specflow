@@ -6,6 +6,7 @@
 	  Background: 
 	  Given I clicked on the profile tab under Profile page
 	  And I clicked on the Education tab
+	  
 
 @automation
 Scenario: Add Education
@@ -18,6 +19,6 @@ Scenario: Update Education
 	Then that updated Education should be displayed on my listings
 
 Scenario: Delete Education
-    Given I have an existing Education
+	Given I have an existing Education
 	When I delete Education 
 	Then that deleted Education should not be displayed on my listings

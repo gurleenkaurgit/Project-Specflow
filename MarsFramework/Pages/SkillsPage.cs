@@ -2,6 +2,7 @@
 using MarsFramework.HookUp;
 using NUnit.Framework;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
 using RelevantCodes.ExtentReports;
 using SeleniumExtras.PageObjects;
 using System;
@@ -52,13 +53,16 @@ namespace MarsFramework.Pages
         internal void NavigateToSkillTab()
         {
             Extension.WaitForElementDisplayed(Driver, By.XPath("//a[contains(text(),'Skills')]"), 5);
-            SkillTab.Click();
+            Actions action = new Actions(Driver);
+            action.MoveToElement(SkillTab).Click(SkillTab).Build().Perform();
+
         }
 
         // Add a new Skill
         internal void AddNewSkill()
         {
-
+            Extension.WaitForElementDisplayed(Driver, By.XPath("//h3[contains(text(),'Skills')]/../..//div[text()='Add New']"), 5);
+            
             //Click Add New button 
             AddNewSkillButton.Click();
 
@@ -79,20 +83,18 @@ namespace MarsFramework.Pages
 
         internal void CheckSkillExists()
         {
+            Thread.Sleep(3000);
+            //Populate the excel data
+            GlobalDefinitions.ExcelLib.PopulateInCollection(Base.ExcelPathProfile, "Skill");
+
             SearchSkill(ExcelLib.ReadData(2, "Skill"), ExcelLib.ReadData(2, "Level"));
-
-
+            Console.WriteLine(isSkillFound);
 
             if (!isSkillFound)
             {
                 SkillsSteps skillSteps = new SkillsSteps();
                 skillSteps.WhenIAddANewSkill();
-                //Populate the excel data
-                //GlobalDefinitions.ExcelLib.PopulateInCollection(Base.ExcelPathProfile, "Language");
-
-                //Call AddNewLanguage Method to add a New Language
-                //AddNewLanguage();
-
+                
             }
         }
 
@@ -195,7 +197,7 @@ namespace MarsFramework.Pages
         {
             SearchSkill(ExcelLib.ReadData(2, "Skill"), ExcelLib.ReadData(2, "Level"));
 
-            GlobalDefinitions.ValidateBoolean(isSkillFound, "Skill Added");
+            GlobalDefinitions.ValidateBoolean(isSkillFound, "Added Skill Exists in Listing-");
 
         }
 
@@ -204,7 +206,7 @@ namespace MarsFramework.Pages
         {
             SearchSkill(ExcelLib.ReadData(2, "UpdateSkill"), ExcelLib.ReadData(2, "UpdateLevel"));
 
-            GlobalDefinitions.ValidateBoolean(isSkillFound, "Skill Updated");
+            GlobalDefinitions.ValidateBoolean(isSkillFound, "Updated Skill Exists in Listing-");
 
         }
 
@@ -213,7 +215,7 @@ namespace MarsFramework.Pages
         {
             SearchSkill(ExcelLib.ReadData(2, "Skill"), ExcelLib.ReadData(2, "Level"));
 
-            GlobalDefinitions.ValidateBoolean(!(isSkillFound), "Skill Deleted");
+            GlobalDefinitions.ValidateBoolean(!(isSkillFound), "Deleted Skill Removes from Listing-");
 
         }
 

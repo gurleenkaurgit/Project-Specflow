@@ -6,7 +6,7 @@
 	  Background: 
 	  Given I clicked on the profile tab under Profile page
 	  And I clicked on the Language tab
-
+	  
 @automation
 Scenario: Add language
 	When I add a new language
@@ -18,6 +18,6 @@ Scenario: Update language
 	Then that updated language should be displayed on my listings
 
 Scenario: Delete language
-    Given I have an existing Langugae
+	Given I have an existing Langugae
 	When I delete Language 
 	Then that deleted language should not be displayed on my listings
