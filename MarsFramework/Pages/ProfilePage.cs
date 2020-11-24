@@ -108,18 +108,7 @@ namespace MarsFramework
         [FindsBy(How = How.XPath, Using = "//button[contains(text(),'Login')]")]
         private IWebElement LoginBtn { get; set; }
 
-        //Search Added Skill
-        [FindsBy(How = How.CssSelector, Using = "input[placeholder='Search skills']")]
-        private IWebElement SearchSkills { get; set; }
-
-        //All Categories count
-        [FindsBy(How = How.XPath, Using = "//b[text()='All Categories']/following-sibling::span")]
-        private IWebElement AllCategoriesCount { get; set; }
-
-        //Get Categories List
-        [FindsBy(How = How.XPath, Using = "//a[@role='listitem']")]
-        private IList<IWebElement> CategoriesList { get; set; }
-
+        
         public ProfilePage()
         {
             PageFactory.InitElements(Global.GlobalDefinitions.Driver, this);
@@ -128,7 +117,8 @@ namespace MarsFramework
 
         internal void NavigateToProfileTab()
         {
-            Extension.WaitForElementDisplayed(Driver, By.LinkText("Profile"), 5);
+            Thread.Sleep(2000);
+           // Extension.WaitForElementDisplayed(Driver, By.LinkText("Profile"), 5);
             Actions action = new Actions(Driver);
             action.MoveToElement(ProfileTab).Click(ProfileTab).Build().Perform();
             
@@ -342,44 +332,6 @@ namespace MarsFramework
             Extension.MessageValidation("Password Changed Successfully");
 
         }
-        internal void SearchSharedSkill()
-        {
-            Extension.WaitForElementDisplayed(Driver, By.CssSelector("input[placeholder='Search skills']"), 2);
-
-            //Enter the title in search skill field and press enter
-            SearchSkills.SendKeys(GlobalDefinitions.ExcelLib.ReadData(2, "Title") + "\n");
-            Extension.WaitForElementDisplayed(Driver, By.XPath("//b[text()='All Categories']/following-sibling::span"), 2);
-            Thread.Sleep(2000);
-
-            //Validate if All categories count is greater than 0
-            GlobalDefinitions.ValidateBoolean(int.Parse(AllCategoriesCount.Text) > 0, "All Categories shown");
-
-            //Validate Category and subcategory added count is greater than 0 when searched
-            foreach (IWebElement Category in CategoriesList)
-            {
-                string CategoryValue = Category.Text.Replace(Category.FindElement(By.XPath("./*")).Text, "").TrimEnd();
-
-                if (CategoryValue.ToLower() == GlobalDefinitions.ExcelLib.ReadData(2, "Category").ToLower())
-                {
-                    Category.Click();
-                    GlobalDefinitions.ValidateBoolean(int.Parse(Category.FindElement(By.XPath("span")).Text) > 0, "Category shown");
-                    IList<IWebElement> SubCategoryList = Driver.FindElements(By.XPath("//a[@role='listitem'][@class='item subcategory']"));
-                    foreach (IWebElement SubCategory in SubCategoryList)
-                    {
-                        string SubCategoryValue = SubCategory.Text.Replace(SubCategory.FindElement(By.XPath("./*")).Text, "").TrimEnd();
-                        if (SubCategoryValue.ToLower() == GlobalDefinitions.ExcelLib.ReadData(2, "SubCategory").ToLower())
-                        {
-                            SubCategory.Click();
-                            GlobalDefinitions.ValidateBoolean(int.Parse(SubCategory.FindElement(By.XPath("span")).Text) > 0, "SubCategory Shown");
-                            Base.Image = SaveScreenShotClass.SaveScreenshot(Driver, "Report");
-                            break;
-                        }
-
-                    }
-                    break;
-
-                }
-            }
-        }
+        
     }
 }

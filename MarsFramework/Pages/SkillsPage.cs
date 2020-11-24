@@ -52,7 +52,7 @@ namespace MarsFramework.Pages
         //Navigate to SKill tab
         internal void NavigateToSkillTab()
         {
-            Extension.WaitForElementDisplayed(Driver, By.XPath("//a[contains(text(),'Skills')]"), 5);
+            Extension.WaitForElementClickable(SkillTab,Driver,5);
             Actions action = new Actions(Driver);
             action.MoveToElement(SkillTab).Click(SkillTab).Build().Perform();
 
@@ -61,7 +61,7 @@ namespace MarsFramework.Pages
         // Add a new Skill
         internal void AddNewSkill()
         {
-            Extension.WaitForElementDisplayed(Driver, By.XPath("//h3[contains(text(),'Skills')]/../..//div[text()='Add New']"), 5);
+            Extension.WaitForElementDisplayed(Driver, By.XPath("//h3[contains(text(),'Skills')]/../..//div[text()='Add New']"), 10);
             
             //Click Add New button 
             AddNewSkillButton.Click();
@@ -83,17 +83,18 @@ namespace MarsFramework.Pages
 
         internal void CheckSkillExists()
         {
-            Thread.Sleep(3000);
+            
             //Populate the excel data
             GlobalDefinitions.ExcelLib.PopulateInCollection(Base.ExcelPathProfile, "Skill");
 
             SearchSkill(ExcelLib.ReadData(2, "Skill"), ExcelLib.ReadData(2, "Level"));
-            Console.WriteLine(isSkillFound);
+            
 
             if (!isSkillFound)
             {
                 SkillsSteps skillSteps = new SkillsSteps();
                 skillSteps.WhenIAddANewSkill();
+                
                 
             }
         }

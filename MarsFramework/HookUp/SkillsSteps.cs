@@ -21,8 +21,7 @@ namespace MarsFramework.HookUp
         
         [Given(@"I have an existing Skill")]
         public void GivenIHaveAnExistingSkill()
-        {
-           
+        {           
             skills.CheckSkillExists();
         }
         

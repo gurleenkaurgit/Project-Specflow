@@ -51,7 +51,7 @@ namespace MarsFramework.Pages
         }
         internal void NavigateToLanguageTab()
         {
-            Extension.WaitForElementDisplayed(Driver, By.XPath("//a[contains(text(),'Languages')]"), 2);
+            Extension.WaitForElementDisplayed(Driver, By.XPath("//a[contains(text(),'Languages')]"), 5);
             Actions action = new Actions(Driver);
             action.MoveToElement(LanguageTab).Click(LanguageTab).Build().Perform();
             

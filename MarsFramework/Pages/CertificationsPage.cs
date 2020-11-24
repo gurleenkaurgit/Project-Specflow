@@ -54,7 +54,7 @@ namespace MarsFramework.Pages
         //Navigate to Certification tab
         internal void NavigateToCertificationTab()
         {
-            Extension.WaitForElementDisplayed(Driver, By.LinkText("Certifications"), 2);
+            Extension.WaitForElementDisplayed(Driver, By.LinkText("Certifications"), 5);
             Actions action = new Actions(Driver);
             action.MoveToElement(CertificationTab).Click(CertificationTab).Build().Perform();
            
@@ -69,6 +69,7 @@ namespace MarsFramework.Pages
 
             if (!isCertificationFound)
             {
+                
                 CertificationsSteps certificationSteps = new CertificationsSteps();
                 certificationSteps.WhenIAddANewCertification();
             }

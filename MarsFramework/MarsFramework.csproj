@@ -156,12 +156,14 @@
     <Compile Include="HookUp\LanguageSteps.cs" />
     <Compile Include="HookUp\ManageListingsSteps.cs" />
     <Compile Include="HookUp\ProfileSteps.cs" />
+    <Compile Include="HookUp\SearchSkillsSteps.cs" />
     <Compile Include="HookUp\ShareSkillSteps.cs" />
     <Compile Include="HookUp\SkillsSteps.cs" />
     <Compile Include="Pages\CertificationsPage.cs" />
     <Compile Include="Pages\EducationPage.cs" />
     <Compile Include="Pages\LanguagePage.cs" />
     <Compile Include="Pages\ManageListingsPage.cs" />
+    <Compile Include="Pages\SearchSkillsPage.cs" />
     <Compile Include="Pages\ShareSkillPage.cs" />
     <Compile Include="Pages\SignIn.cs" />
     <Compile Include="Pages\SignUp.cs" />
@@ -185,6 +187,7 @@
     <None Include="Feature\Language.feature" />
     <None Include="Feature\ManageListings.feature" />
     <None Include="Feature\Profile.feature" />
+    <None Include="Feature\SearchSkills.feature" />
     <None Include="Feature\ShareSkill.feature" />
     <None Include="Feature\Skills.feature" />
     <None Include="packages.config" />

@@ -21,9 +21,8 @@ namespace MarsFramework.HookUp
         [Given(@"I have an existing Share Skill")]
         public void GivenIHaveAnExistingShareSkill()
         {
-            //Populate the excel data
-            GlobalDefinitions.ExcelLib.PopulateInCollection(Base.ExcelPathShareSkill, "ShareSkill");
-
+            
+            manageListings = new ManageListingsPage();
             manageListings.CheckShareSkillExists();
         }
         
